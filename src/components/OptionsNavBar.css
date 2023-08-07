@@ -18,6 +18,8 @@
 
 .optionsnow .navbar-nav {
     margin-left: auto;
+    background-color: #272727;
+    color: #B2B2B2;
 }
 
 .optionsnow .nav-link {
@@ -29,12 +31,15 @@
     color: #555;
 }
 
-/* Aktif olan link için stil */
 .optionsnow .nav-link.active {
     color: #007bff;
 }
 
-/* Navbar Toggle butonu stil */
+
 .optionsnow .navbar-toggler {
     border-color: #333;
+}
+
+.optionsnow .custom-dropdown-arrow .dropdown-toggle::after {
+    border-top-color: #b2b2b2; /* Set your desired color here */
 }

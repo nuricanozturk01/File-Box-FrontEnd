@@ -26,17 +26,6 @@ const GridComponent = () => {
         {name: 'Dosya 18', url: 'dosya3.jpg'},
         {name: 'Dosya 19', url: 'dosya3.jpg'},
         {name: 'Dosya 20', url: 'dosya3.jpg'},
-/*
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
 
         {name: 'Dosya 11', url: 'dosya1.pdf'},
         {name: 'Dosya 12', url: 'dosya2.docx'},
@@ -59,7 +48,6 @@ const GridComponent = () => {
         {name: 'Dosya 18', url: 'dosya3.jpg'},
         {name: 'Dosya 19', url: 'dosya3.jpg'},
         {name: 'Dosya 20', url: 'dosya3.jpg'},
-
 
         {name: 'Dosya 11', url: 'dosya1.pdf'},
         {name: 'Dosya 12', url: 'dosya2.docx'},
@@ -108,6 +96,18 @@ const GridComponent = () => {
         {name: 'Dosya 19', url: 'dosya3.jpg'},
         {name: 'Dosya 20', url: 'dosya3.jpg'},
 
+
+        {name: 'Dosya 11', url: 'dosya1.pdf'},
+        {name: 'Dosya 12', url: 'dosya2.docx'},
+        {name: 'Dosya 13', url: 'dosya3.jpg'},
+        {name: 'Dosya 14', url: 'dosya3.jpg'},
+        {name: 'Dosya 15', url: 'dosya3.jpg'},
+        {name: 'Dosya 16', url: 'dosya3.jpg'},
+        {name: 'Dosya 17', url: 'dosya3.jpg'},
+        {name: 'Dosya 18', url: 'dosya3.jpg'},
+        {name: 'Dosya 19', url: 'dosya3.jpg'},
+        {name: 'Dosya 20', url: 'dosya3.jpg'},
+
         {name: 'Dosya 11', url: 'dosya1.pdf'},
         {name: 'Dosya 12', url: 'dosya2.docx'},
         {name: 'Dosya 13', url: 'dosya3.jpg'},
@@ -177,15 +177,14 @@ const GridComponent = () => {
         {name: 'Dosya 17', url: 'dosya3.jpg'},
         {name: 'Dosya 18', url: 'dosya3.jpg'},
         {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},*/
-        // ... diğer dosya öğeleri
+        {name: 'Dosya 20', url: 'dosya3.jpg'},
     ];
     return (
         <Container>
-            <Row style={{marginLeft: "20px", marginRight: "20px"}}>
+            <Row style={{marginLeft: "20px", marginRight: "20px", backgroundColor: "#272727",height: "100%", width: "100%"}} >
 
                 {files.map((file, index) => (
-                    <Col key={index} style={{ margin: "5px" }} xs={12} sm={6} md={4} lg={1}>
+                    <Col key={index} style={{ margin: "5px"}} xs={12} sm={6} md={4} lg={1} >
                         <FolderComponent name={file.name} url={file.url} />
                     </Col>
                 ))}
