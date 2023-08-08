@@ -7,16 +7,18 @@ import {NavDropdown} from "react-bootstrap";
 import listView from "../images/list-view-white.png"
 import grid from "../images/grid-view-white.png"
 
-
-const OptionsNavBar = () => {
+const OptionsNavBar = (props) => {
+    const HandleTableView = () => {
+        props.viewMode(true)
+    };
     return (
-        <Navbar expand="sm" style={{height: "30px", marginTop: "10px"}} className="optionsnow">
+        <Navbar expand="sm" style={{height: "40px", marginTop: "30px",marginBottom: "-30px",backgroundColor: "#272727"}} className="optionsnow">
             <Container data-bs-theme="dark">
-                <Navbar.Brand style={{color: "#B2B2B2"}} className="navbar__brand" href="#home">nuricanozturk\deneme\file</Navbar.Brand>
+                <Navbar.Brand style={{color: "#B2B2B2"}} className="navbar__brand" href="/">nuricanozturk\deneme\file</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
 
-                    <Nav  className="ms-auto" style={{backgroundColor: "#272727", color: "#272727"}}>
+                    <Nav  className="ms-auto" style={{backgroundColor: "#272727", color: "#b2b2b2"}}>
                         <NavDropdown title={<span style={{ color: "#b2b2b2" }}>Filter</span>} id="basic-nav-dropdown" data-bs-theme="dark" className="custom-dropdown-arrow">
                             <NavDropdown.Item  href="#action/3.1">File Extension</NavDropdown.Item>
                             <NavDropdown.Item  href="#action/3.2">File Length (byte)</NavDropdown.Item>
@@ -28,7 +30,7 @@ const OptionsNavBar = () => {
                                      style={{display: 'flex', alignItems: 'center', color: "#b2b2b2"}}
                                      className="custom-dropdown-arrow">
 
-                            <NavDropdown.Item href="#action/3.1">
+                            <NavDropdown.Item href="#action/3.1" >
                                   <span>
                                     <img src={grid} style={{marginRight: "15px"}} alt="logo" width="15px"/>
                                     Grid
@@ -36,14 +38,12 @@ const OptionsNavBar = () => {
                             </NavDropdown.Item>
 
 
-                            <NavDropdown.Item style={{fontSize: "1rem"}} href="#action/3.2">
+                            <NavDropdown.Item style={{fontSize: "1rem"}} href="#action/3.2" onClick={HandleTableView}>
                                <span>
                                     <img src={listView} style={{marginRight: "15px"}} alt="logo" width="15px"/>
                                     List
                                 </span>
                             </NavDropdown.Item>
-
-
                         </NavDropdown>
                     </Nav>
                 </Navbar.Collapse>

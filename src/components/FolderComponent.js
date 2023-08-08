@@ -1,13 +1,14 @@
 import React from "react";
-
-const FolderComponent = ({name, url}) => {
+import folder_image from "../images/folder.png"
+const FolderComponent = ({name, path, creationDate, url, isTable}) => {
 
     return (
-        <div style={{margin: "5px"}}>
-            <a href={url} target="_blank" rel="noopener noreferrer">
-                {name}
-            </a>
-        </div>);
+        <div style={{display: "inline-block", textAlign: "center"}} >
+            <img src={folder_image} alt="folder" height="100px" width="100px" style={{display: "block"}}/>
+            <label style={{color: "#b2b2b2", textAlign: "center"}}>{name}</label>
+
+        </div>
+        );
 }
 
 export default FolderComponent;

@@ -6,7 +6,6 @@ const LOGIN_URL = "http://localhost:5299/api/auth/login/user"
 const ValidateUser = async (userInput) => {
     try {
 
-
         const UserLoginDto = {
             username: userInput.username,
             password: userInput.password,
@@ -18,6 +17,7 @@ const ValidateUser = async (userInput) => {
         return {
             username: responseData.username,
             token: responseData.token,
+            user_id: responseData.user_id,
             success: true
         };
 
@@ -28,6 +28,5 @@ const ValidateUser = async (userInput) => {
         }
     }
 }
-
 
 export default ValidateUser;

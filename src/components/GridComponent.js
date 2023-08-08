@@ -1,191 +1,51 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import {Col, Row} from "react-bootstrap";
 import FolderComponent from "./FolderComponent";
+import {FindFilesOnFolder, FindFoldersByUserIdAndFolderId} from "../service/FindFoldersByUserIdAndFolderId";
+import FileComponent from "./FileComponent";
 
 const GridComponent = () => {
-    const files = [
-        {name: 'Dosya 1', url: 'dosya1.pdf'},
-        {name: 'Dosya 2', url: 'dosya2.docx'},
-        {name: 'Dosya 3', url: 'dosya3.jpg'},
-        {name: 'Dosya 4', url: 'dosya3.jpg'},
-        {name: 'Dosya 5', url: 'dosya3.jpg'},
-        {name: 'Dosya 6', url: 'dosya3.jpg'},
-        {name: 'Dosya 7', url: 'dosya3.jpg'},
-        {name: 'Dosya 8', url: 'dosya3.jpg'},
-        {name: 'Dosya 9', url: 'dosya3.jpg'},
-        {name: 'Dosya 10', url: 'dosya3.jpg'},
+    const [folderView, setFolderView] = useState([]);
+    const [fileView, setFileView] = useState([]);
 
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-        {name: 'Dosya 11', url: 'dosya1.pdf'},
-        {name: 'Dosya 12', url: 'dosya2.docx'},
-        {name: 'Dosya 13', url: 'dosya3.jpg'},
-        {name: 'Dosya 14', url: 'dosya3.jpg'},
-        {name: 'Dosya 15', url: 'dosya3.jpg'},
-        {name: 'Dosya 16', url: 'dosya3.jpg'},
-        {name: 'Dosya 17', url: 'dosya3.jpg'},
-        {name: 'Dosya 18', url: 'dosya3.jpg'},
-        {name: 'Dosya 19', url: 'dosya3.jpg'},
-        {name: 'Dosya 20', url: 'dosya3.jpg'},
-    ];
+    useEffect(() => {
+        const fetchData = async () => {
+            const folders = await FindFoldersByUserIdAndFolderId(1);
+            const files = await FindFilesOnFolder(1)
+            setFolderView(folders)
+            setFileView(files)
+        }
+        fetchData()
+    }, [])
+    const HandleFolderClick = async (folderId) => {
+        const folders = await FindFoldersByUserIdAndFolderId(folderId);
+        const files = await FindFilesOnFolder(folderId)
+        setFolderView(folders)
+        setFileView(files)
+    };
     return (
         <Container>
-            <Row style={{marginLeft: "20px", marginRight: "20px", backgroundColor: "#272727",height: "100%", width: "100%"}} >
+            <Row style={{
+                marginLeft: "20px",
+                marginRight: "20px",
+                backgroundColor: "#272727",
+                height: "100%",
+                width: "100%"
+            }}>
+                {folderView.map((folder, index) => (
+                    <Col key={index} style={{margin: "auto"}} xs={12} sm={6} md={4} lg={1}>
+                        <a onClick={() => HandleFolderClick(folder.folderId)}>
+                            <FolderComponent name={folder.folderName} url={folder.creationDate}/>
+                        </a>
+                    </Col>
+                ))}
 
-                {files.map((file, index) => (
-                    <Col key={index} style={{ margin: "5px"}} xs={12} sm={6} md={4} lg={1} >
-                        <FolderComponent name={file.name} url={file.url} />
+                {fileView.map((file, index) => (
+                    <Col key={index} style={{margin: "1rem"}} xs={12} sm={6} md={4} lg={1}>
+                        <a>
+                            <FileComponent name={file.file_name} url={file.created_date}/>
+                        </a>
                     </Col>
                 ))}
             </Row>

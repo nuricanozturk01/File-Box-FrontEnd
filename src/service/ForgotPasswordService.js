@@ -1,17 +1,12 @@
 import axios from "axios";
 
-const CHANGE_PASSWORD_REQUEST_URL = "http://localhost:5299/api/change/password?email=%s";
-const CHANGE_PASSWORD_URL = "http://localhost:5299/api/change/reset-password?token=%s&&p=%s"
-const FIND_USER_BY_RESET_PASSWORD_TOKEN = "http://localhost:5299/api/auth/find/user/token?token=%s"
-
+/*
+    Validate the password with given email
+ */
 const ValidatePassword = async (email) => {
-    console.log(email)
-    const sprintf = require("sprintf-js").vsprintf;
-    const formattedUrl = sprintf(CHANGE_PASSWORD_REQUEST_URL, email);
-    console.log(formattedUrl);
-
     try {
-        const response = await axios.post(formattedUrl);
+        const CHANGE_PASSWORD_REQUEST_URL = `http://localhost:5299/api/change/password?email=${email}`;
+        const response = await axios.post(CHANGE_PASSWORD_REQUEST_URL);
         const responseData = response.data.data
         return {
             username: responseData.username,
@@ -26,33 +21,32 @@ const ValidatePassword = async (email) => {
             success: false
         }
     }
-
-
 }
 
+/*
+    Change Password
+ */
 export const ChangePassword = async (newPassword, token) => {
     try {
-        const sprintf = require("sprintf-js").vsprintf;
-        const formattedUrl = sprintf(CHANGE_PASSWORD_URL, token, newPassword);
-        await axios.post(formattedUrl);
+        const CHANGE_PASSWORD_URL = `http://localhost:5299/api/change/reset-password?token=${token}&&p=${newPassword}`
+        await axios.post(CHANGE_PASSWORD_URL);
         return true;
     } catch (error) {
         return false;
     }
 }
 
-
+/*
+    Validate the reset password token
+ */
 export const ValidateToken = async (token) => {
     try {
-        const sprintf = require("sprintf-js").vsprintf;
-        const formattedUrl = sprintf(FIND_USER_BY_RESET_PASSWORD_TOKEN, token);
-        const response = await axios.get(formattedUrl);
-        const responseData = response.data.data
-
+        const FIND_USER_BY_RESET_PASSWORD_TOKEN = `http://localhost:5299/api/auth/find/user/token?token=${token}`
+        const response = await axios.get(FIND_USER_BY_RESET_PASSWORD_TOKEN);
+        const responseData = response.data.data.token
         return responseData.token === token;
     } catch (error) {
         return error.response.data.success
     }
-
 }
 export default ValidatePassword;

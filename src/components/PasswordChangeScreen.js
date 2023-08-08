@@ -69,13 +69,13 @@ const PasswordChangeScreen = () => {
                         <div className="form-floating mb-4">
                             <input type="password" onChange={event => setNewPasswordAgain(event.target.value)}
                                    className="form-control"
-                                   id="floatingPassword"
+                                   id="floatingPasswordAgain"
                                    style={{
                                        backgroundColor: "#272727", color: "#B2B2B2",
                                        height: "10px", borderColor: "#808080",
                                    }}/>
 
-                            <label style={{color: "#272727"}} htmlFor="floatingPassword">Password Again</label>
+                            <label style={{color: "#272727"}} htmlFor="floatingPasswordAgain">Password Again</label>
                         </div>
 
                         <div className="text-center mb-4">

@@ -14,7 +14,6 @@ const LoginComponent = () => {
         password: null, // initial state
     })
 
-
     async function HandleLoginButton() {
         setUserInput({
             ...userInput,
@@ -22,6 +21,10 @@ const LoginComponent = () => {
             password: userInput.password,
         })
         const response = await ValidateUser(userInput);
+        console.log(response)
+        localStorage.setItem("token", response.token)
+        localStorage.setItem('user_id', response.user_id)
+        // token
         setResponse(response)
         setSuccess(response.success ? "YES" : "NO")
     }
@@ -69,8 +72,10 @@ const LoginComponent = () => {
                             <input type="password" onChange={HandlePassword} className="form-control"
                                    id="floatingPassword"
                                    style={{
-                                       backgroundColor: "#272727", color: "#B2B2B2",
-                                       height: "10px", borderColor: "#808080"
+                                       backgroundColor: "#272727",
+                                       color: "#B2B2B2",
+                                       height: "10px",
+                                       borderColor: "#808080"
                                    }} placeholder="Password"/>
 
                             <label style={{color: "#272727"}} htmlFor="floatingPassword">Password</label>
@@ -80,18 +85,26 @@ const LoginComponent = () => {
                             <Link to="/mainpage">
                                 <button onClick={HandleLoginButton}
                                         className="btn btn-primary w-10 py-2"
-                                        style={{backgroundColor: "#272727", color: "#B2B2B2", borderColor: "#808080"}}
+                                        style={{
+                                            backgroundColor: "#272727",
+                                            color: "#B2B2B2",
+                                            borderColor: "#808080"
+                                        }}
                                         type="submit">Login
                                 </button>
                             </Link>
                             <hr/>
-                           <Link to="/forgot-password">
-                               <button
-                                   className="btn btn-primary w-10 py-2"
-                                   style={{backgroundColor: "#272727", color: "#B2B2B2", borderColor: "#808080"}}
-                                   type="submit">Forgot Password
-                               </button>
-                           </Link>
+                            <Link to="/forgot-password">
+                                <button
+                                    className="btn btn-primary w-10 py-2"
+                                    style={{
+                                        backgroundColor: "#272727",
+                                        color: "#B2B2B2",
+                                        borderColor: "#808080"
+                                    }}
+                                    type="submit">Forgot Password
+                                </button>
+                            </Link>
                         </div>
                     </form>
                 </div>
