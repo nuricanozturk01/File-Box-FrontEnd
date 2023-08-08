@@ -19,6 +19,7 @@ const PdfViewer = (viewFile) => {
             }
         };
         load();
+        
     }, [viewFile.file.file_path]);
 
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
@@ -28,8 +29,8 @@ const PdfViewer = (viewFile) => {
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.js">
                 <div
                     style={{
-                        height: "750px",
-                        width: "900px",
+                        height: "900px",
+                        width: "950px",
                         marginLeft: "auto",
                         marginRight: "auto"
                     }}>

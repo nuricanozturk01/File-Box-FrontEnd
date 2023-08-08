@@ -34,11 +34,16 @@ const TableComponent = () => {
         setViewFile(file)
     }
 
+    const ClosePopupHandler = () => {
+        setClick(false)
+    };
+
+
     return (
         <div>
 
             <div>
-                {click && <PopupComponent viewFile={viewFile} onClose={() => {}}></PopupComponent>}
+                {click && <PopupComponent viewFile={viewFile} onClose={() => ClosePopupHandler()}></PopupComponent>}
             </div>
 
             <div>
