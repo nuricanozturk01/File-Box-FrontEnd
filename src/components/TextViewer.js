@@ -1,0 +1,44 @@
+import React, {useEffect, useState} from 'react';
+import SimpleCodeEditor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs'; // Syntax renklendirmesi için
+import 'prismjs/themes/prism.css'; // Syntax renklendirmesi için CSS
+
+//const d = '../components/file_box/' + filePath.file_path.replace(/\\/g, '/')
+const TextViewer = ({filePath}) => {
+    const d = '../components/file_box/' + filePath.file_path.replace(/\\/g, '/')
+    const [code, setCode] = useState("");
+
+    useEffect(() => {
+        fetch(require('../components/file_box/' + filePath.file_path.replace(/\\/g, '/')))
+            .then(response => response.text())
+            .then(data => {
+                setCode(data);
+            })
+            .catch(error => {
+                console.error("Hata:", error);
+            });
+        console.log(code)
+    }, [filePath]);
+
+    const handleChange = newCode => {
+        setCode(newCode);
+    };
+
+    return (
+        <SimpleCodeEditor
+            value={code}
+            onValueChange={handleChange}
+            highlight={newCode => highlight(newCode, languages.markup)}
+            padding={10}
+            style={{
+                overflow: 'auto',
+                fontFamily: '"Fira code", "Fira Mono", monospace',
+                fontSize: 14,
+                color: '#b2b2b2', // Yazı rengini buradan ayarlayın
+                maxHeight: '700px'
+            }}
+        />
+    );
+}
+
+export default TextViewer;

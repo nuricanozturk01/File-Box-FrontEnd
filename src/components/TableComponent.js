@@ -34,7 +34,7 @@ const TableComponent = () => {
         setViewFile(file)
     }
 
-    const ClosePopupHandler = () => {
+    const ClosePopupHandler = async () => {
         setClick(false)
     };
 
@@ -43,7 +43,7 @@ const TableComponent = () => {
         <div>
 
             <div>
-                {click && <PopupComponent viewFile={viewFile} onClose={() => ClosePopupHandler()}></PopupComponent>}
+                {click && <PopupComponent viewFile={viewFile} onClose={async () => await ClosePopupHandler()}></PopupComponent>}
             </div>
 
             <div>

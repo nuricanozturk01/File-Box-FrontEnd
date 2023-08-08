@@ -1,22 +1,37 @@
 import React, {useEffect, useState} from "react";
 import PdfViewer from "./PdfViewer";
 import './PopupComponent.css'
+import TextViewer from "./TextViewer";
 
-const PopupComponent = ( {viewFile,onClose}) => {
+const PopupComponent = ({viewFile, onClose}) => {
     const [file, setFile] = useState([])
     const [isPdf, setIsPdf] = useState()
+    const [isText, setIsText] = useState()
     const [unDefinedType, setUndefinedType] = useState([])
 
     const setFileType = (file_type) => {
+
         if (file_type === ".pdf")
             setIsPdf(true)
-
-        else setUndefinedType(true)
+        else setIsText(true)
     };
 
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.keyCode === 0x1B)
+                onClose();
+        };
 
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]);
     useEffect(() => {
         setUndefinedType(false)
+        setIsPdf(false)
+        setIsText(false)
         const load = async () => {
             try {
                 setFile(viewFile);
@@ -29,11 +44,10 @@ const PopupComponent = ( {viewFile,onClose}) => {
     }, [file, viewFile, viewFile.file]);
 
 
-
     return (
         <div className="modal-overlay">
-            {isPdf &&  <PdfViewer file={viewFile}/>}
-            
+            {isPdf && <PdfViewer file={viewFile}/>}
+            {isText && <TextViewer filePath={viewFile}/>}
             {unDefinedType && <h2 style={{color: "white"}}>Undefined file type!</h2>}
 
 
