@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import SimpleCodeEditor from 'react-simple-code-editor';
-import { highlight, languages } from 'prismjs'; // Syntax renklendirmesi için
-import 'prismjs/themes/prism.css'; // Syntax renklendirmesi için CSS
+import {highlight, languages} from 'prismjs';
+import 'prismjs/themes/prism.css';
 
-//const d = '../components/file_box/' + filePath.file_path.replace(/\\/g, '/')
+
 const TextViewer = ({filePath}) => {
-    const d = '../components/file_box/' + filePath.file_path.replace(/\\/g, '/')
     const [code, setCode] = useState("");
 
     useEffect(() => {
@@ -34,7 +33,7 @@ const TextViewer = ({filePath}) => {
                 overflow: 'auto',
                 fontFamily: '"Fira code", "Fira Mono", monospace',
                 fontSize: 14,
-                color: '#b2b2b2', // Yazı rengini buradan ayarlayın
+                color: '#b2b2b2',
                 maxHeight: '700px'
             }}
         />

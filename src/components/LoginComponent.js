@@ -5,10 +5,14 @@ import AlertComponent from "./AlertComponent";
 import {Link} from "react-router-dom";
 
 
+
 const LoginComponent = () => {
 
     const [success, setSuccess] = useState("NONE")
     const [response, setResponse] = useState(null)
+
+
+
     const [userInput, setUserInput] = useState({
         username: null, // initial state
         password: null, // initial state
@@ -20,13 +24,16 @@ const LoginComponent = () => {
             username: userInput.username,
             password: userInput.password,
         })
+
         const response = await ValidateUser(userInput);
-        console.log(response)
+        // console.log(response)
         localStorage.setItem("token", response.token)
         localStorage.setItem('user_id', response.user_id)
+        localStorage.setItem('username', response.username)
         // token
         setResponse(response)
         setSuccess(response.success ? "YES" : "NO")
+        
     }
 
     function HandlePassword(event) {
@@ -46,6 +53,8 @@ const LoginComponent = () => {
     const ProtectForm = (event) => {
         event.preventDefault()
     };
+
+
     return (
 
         <div className="container">

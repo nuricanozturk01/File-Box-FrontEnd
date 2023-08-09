@@ -24,3 +24,14 @@ export const FindFoldersByUserIdAndFolderId = async (folderId) => {
         console.error('Error fetching data:', error);
     }
 }
+
+export const FindRootFolderByUserId = async () => {
+    try {
+        const user_id = localStorage.getItem('user_id');
+        const URL = `http://localhost:5299/api/folder/find/root/uuid?uid=${user_id}`;
+        const response = await axios.get(URL);
+        return response.data.data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
