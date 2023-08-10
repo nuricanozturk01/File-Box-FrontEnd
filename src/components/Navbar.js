@@ -8,7 +8,8 @@ const NavBar = () => {
     return (
         <Navbar bg="dark" data-bs-theme="dark" className="bg-body-tertiary justify-content-between">
             <Container>
-                <Navbar.Brand href="#home">File-Box</Navbar.Brand>
+                <Navbar.Brand>FileBox</Navbar.Brand>
+                <Navbar.Brand href="/mainpage">Home</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
@@ -19,5 +20,4 @@ const NavBar = () => {
         </Navbar>
     );
 }
-
 export default NavBar;

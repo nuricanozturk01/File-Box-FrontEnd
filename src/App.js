@@ -4,7 +4,7 @@ import LoginComponent from "./components/LoginComponent";
 import ForgotPasswordComponent from "./components/ForgotPasswordComponent";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import PasswordChangeScreen from "./components/PasswordChangeScreen";
-import ContextProvider from "./components/ContextProvider";
+import ContextProvider from "./Context/ContextProvider";
 
 
 const router = createBrowserRouter([

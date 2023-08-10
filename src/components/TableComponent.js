@@ -8,10 +8,7 @@ import {
     FindRootFolderByUserId
 } from "../service/FindFoldersByUserIdAndFolderId";
 import PopupComponent from "./PopupComponent";
-import {Context} from "./ContextProvider";
-
-
-
+import {Context} from "../Context/ContextProvider";
 
 
 const TableComponent = ({navigateId}) => {
@@ -20,25 +17,23 @@ const TableComponent = ({navigateId}) => {
     const [click, setClick] = useState(false)
     const [viewFile, setViewFile] = useState(null)
     const context = useContext(Context)
-
+    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             const rootFolder = await FindRootFolderByUserId(localStorage.getItem('user_id'))
             const folders = await FindFoldersByUserIdAndFolderId(rootFolder.folder_id);
-
             const files = await FindFilesOnFolder(rootFolder.folder_id)
             setFolderView(folders)
             setFileView(files)
         }
 
         fetchData()
-
     }, [])
 
 
     const HandleFolderClick = async (folder) => {
-       
+
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
         setFolderView(folders)
@@ -64,8 +59,7 @@ const TableComponent = ({navigateId}) => {
     };
 
     useEffect(() => {
-        if (navigateId > 0 && navigateId !== undefined && navigateId !== null)
-        {
+        if (navigateId > 0 && navigateId !== undefined && navigateId !== null) {
             const asd = async () => {
                 const folders = await FindFoldersByUserIdAndFolderId(navigateId);
                 const files = await FindFilesOnFolder(navigateId)
@@ -77,6 +71,13 @@ const TableComponent = ({navigateId}) => {
 
     }, [navigateId])
 
+    function handleDrag(e) {
+        e.preventDefault();
+        const droppedFiles = Array.from(e.dataTransfer.files);
+        setFiles(droppedFiles);
+        console.log(files)
+    }
+
     return (
         <div>
 
@@ -84,66 +85,85 @@ const TableComponent = ({navigateId}) => {
                 {click && <PopupComponent viewFile={viewFile} onClose={async () => await ClosePopupHandler()}/>}
             </div>
 
-            <div>
-                {!click && (<Table className="table-dark" style={{backgroundColor: "#272727"}}>
-                    <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
-                    <tr>
-                        <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Folder</th>
-                        <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
-                    </tr>
-                    </thead>
-
-                    <tbody style={{backgroundColor: "#272727"}}>
-
-                    {folderView.map((folder, idx) => (
-                        <tr key={idx}>
-                            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}>
-                                <a onClick={() => HandleFolderClick(folder)}>
-                                    <img
-                                        src={folder_image}
-                                        alt="folder"
-                                        height="50"
-                                        width="50"
-                                    />
-                                    <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
-                                        {folder.folderName}
-                                    </label>
-                                </a>
-                            </td>
-                            <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                                <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
-                                    {folder.creationDate}
-                                </label>
-                            </td>
+            <div onDrop={handleDrag} onDragOver={e => e.preventDefault()}>
+                {!click && (
+                    <Table className="table-dark" style={{backgroundColor: "#272727"}}>
+                        <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
+                        <tr>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Folder</th>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Download</th>
                         </tr>
-                    ))}
+                        </thead>
 
-                    {fileView.map((file, idx) => (
-                        <tr key={idx}>
+                        <tbody style={{backgroundColor: "#272727"}}>
 
-                            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}>
-                                <a onClick={() => HandleFile(file)}>
-                                    <img
-                                        src={file_image}
-                                        alt="file"
-                                        height="50"
-                                        width="50"
-                                    />
-                                    <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
-                                        {file.file_name}
+                        {folderView.map((folder, idx) => (
+                            <tr key={idx}>
+                                <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}>
+                                    <a onClick={() => HandleFolderClick(folder)}>
+                                        <img
+                                            src={folder_image}
+                                            alt="folder"
+                                            height="40"
+                                            width="40"
+                                        />
+                                        <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
+                                            {folder.folderName}
+                                        </label>
+                                    </a>
+                                </td>
+                                <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
+                                    <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
+                                        {folder.creationDate}
                                     </label>
-                                </a>
-                            </td>
-                            <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                                <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
-                                    {file.created_date}
-                                </label>
-                            </td>
+                                </td>
 
-                        </tr>
-                    ))}
-                    </tbody>
-                </Table>)}
+                                <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
+
+                                    <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="checkbox" value=""/>
+                                        </div>
+                                    </label>
+
+                                </td>
+                            </tr>
+                        ))}
+
+                        {fileView.map((file, idx) => (
+                            <tr key={idx}>
+                                <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}>
+                                    <a onClick={() => HandleFile(file)} style={{ display: "flex", alignItems: "center" }}>
+                                        <img
+                                            src={file_image}
+                                            alt="file"
+                                            height="50"
+                                            width="50"
+                                        />
+                                        <label style={{ color: "#b2b2b2", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "500px" }}>
+                                            {file.file_name}
+                                        </label>
+                                    </a>
+                                </td>
+                                <td style={{ verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727", whiteSpace: "normal" }}>
+                                    <label style={{ color: "#b2b2b2", marginLeft: "20px", whiteSpace: "normal" }}>
+                                        {file.created_date}
+                                    </label>
+                                </td>
+                                <td style={{ verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727" }}>
+                                    <label style={{ color: "#b2b2b2", marginLeft: "20px" }}>
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="checkbox" value="" />
+                                        </div>
+                                    </label>
+                                </td>
+                            </tr>
+                        ))}
+
+
+                        </tbody>
+                    </Table>)}
 
             </div>
         </div>

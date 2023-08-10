@@ -32,7 +32,7 @@ const TextViewer = ({filePath}) => {
             style={{
                 overflow: 'auto',
                 fontFamily: '"Fira code", "Fira Mono", monospace',
-                fontSize: 14,
+                fontSize: 16,
                 color: '#b2b2b2',
                 maxHeight: '700px'
             }}

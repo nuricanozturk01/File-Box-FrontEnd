@@ -7,6 +7,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 
 const PdfViewer = (viewFile) => {
+
     const [pdfFile, setPdfFile] = useState();
 
     useEffect(() => {
@@ -19,7 +20,7 @@ const PdfViewer = (viewFile) => {
             }
         };
         load();
-        
+
     }, [viewFile.file.file_path]);
 
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
