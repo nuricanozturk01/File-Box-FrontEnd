@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import AlertComponent from "./AlertComponent";
 import filebox from "../images/filebox_logo.png";
 import ValidatePassword from "../service/ForgotPasswordService";
 

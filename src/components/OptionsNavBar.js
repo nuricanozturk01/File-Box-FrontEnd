@@ -10,14 +10,11 @@ import {Context} from "./ContextProvider";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 
 
-
-
 const OptionsNavBar = ({handleFolderClick}) => {
 
     const [rootFolder, setRootFolder] = useState(null)
     const [rootUser, setRootUser] = useState(null)
     const context = useContext(Context)
-
 
     useEffect(() => {
         const findRootFolder = async () => {
@@ -45,8 +42,7 @@ const OptionsNavBar = ({handleFolderClick}) => {
 
     const handleLinkClick = async (link, titleItem) => {
         handleFolderClick(titleItem.folderId)
-        if (titleItem.folderId !== rootFolder.folderId)
-        {
+        if (titleItem.folderId !== rootFolder.folderId) {
             const filteredTitle = context.title.filter(item => item.folderId !== titleItem.folderId);
 
             context.setTitle(filteredTitle);
@@ -58,14 +54,16 @@ const OptionsNavBar = ({handleFolderClick}) => {
                 className="optionsnow">
             <Container data-bs-theme="dark">
                 <Navbar.Brand style={{color: "#B2B2B2"}} className="navbar__brand" href="">
+
                     <Context.Consumer>
                         {context => (
                             <div>
                                 {context.title.map((titleItem, index) => (
                                     <span key={index}>
-                                   {index > 0 && " > "}
-                                        <span
-                                            onClick={() => handleLinkClick(titleItem.link, titleItem)}>{titleItem.shortName}</span>
+                                        {index > 0 && " > "}
+                                        <span onClick={() => handleLinkClick(titleItem.link, titleItem)}>
+                                            {titleItem.shortName}
+                                        </span>
                                     </span>
                                 ))}
 

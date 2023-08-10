@@ -2,7 +2,11 @@ import React, {useContext, useEffect, useState} from "react";
 import {Table} from "react-bootstrap";
 import folder_image from "../images/folder.png";
 import file_image from "../images/file.png";
-import {FindFilesOnFolder, FindFoldersByUserIdAndFolderId} from "../service/FindFoldersByUserIdAndFolderId";
+import {
+    FindFilesOnFolder,
+    FindFoldersByUserIdAndFolderId,
+    FindRootFolderByUserId
+} from "../service/FindFoldersByUserIdAndFolderId";
 import PopupComponent from "./PopupComponent";
 import {Context} from "./ContextProvider";
 
@@ -20,9 +24,10 @@ const TableComponent = ({navigateId}) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const folders = await FindFoldersByUserIdAndFolderId(1);
+            const rootFolder = await FindRootFolderByUserId(localStorage.getItem('user_id'))
+            const folders = await FindFoldersByUserIdAndFolderId(rootFolder.folder_id);
 
-            const files = await FindFilesOnFolder(1)
+            const files = await FindFilesOnFolder(rootFolder.folder_id)
             setFolderView(folders)
             setFileView(files)
         }

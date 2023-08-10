@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import OptionsNavBar from "./OptionsNavBar";
 import TableComponent from "./TableComponent";
-import {Context} from "./ContextProvider";
 
 
 
