@@ -1,5 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
-import {Table} from "react-bootstrap";
+import {Dropdown, Table} from "react-bootstrap";
 import folder_image from "../images/folder.png";
 import file_image from "../images/file.png";
 import {
@@ -9,15 +9,26 @@ import {
 } from "../service/FindFoldersByUserIdAndFolderId";
 import PopupComponent from "./PopupComponent";
 import {Context} from "../Context/ContextProvider";
+import Menu from "./Menu";
+import RenameFile from "./RenameFile";
+import PopupRename from "./PopupRename";
+import {RemoveFileWithFileId, RemoveFolderWithFolderId} from "../service/RemoveService";
+import {DownloadFile, DownloadFolder} from "../service/DownloadService";
 
 
 const TableComponent = ({navigateId}) => {
     const [folderView, setFolderView] = useState([]);
     const [fileView, setFileView] = useState([]);
+
     const [click, setClick] = useState(false)
     const [viewFile, setViewFile] = useState(null)
+    const [viewFolder, setViewFolder] = useState(null)
+
+    const [renamingFile, setRenamingFile] = useState(false)
+    const [renamingFolder, setRenamingFolder] = useState(false)
+    const [isClickMenu, setIsClickMenu] = useState(false);
+    const [isDelete, setIsDelete] = useState(false)
     const context = useContext(Context)
-    const [files, setFiles] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -33,6 +44,7 @@ const TableComponent = ({navigateId}) => {
 
 
     const HandleFolderClick = async (folder) => {
+        context.setCurrentFolder(folder)
 
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
@@ -56,6 +68,7 @@ const TableComponent = ({navigateId}) => {
 
     const ClosePopupHandler = async () => {
         setClick(false)
+        setIsClickMenu(false)
     };
 
     useEffect(() => {
@@ -71,28 +84,60 @@ const TableComponent = ({navigateId}) => {
 
     }, [navigateId])
 
-    function handleDrag(e) {
-        e.preventDefault();
-        const droppedFiles = Array.from(e.dataTransfer.files);
-        setFiles(droppedFiles);
-        console.log(files)
-    }
 
+    const HandleRenameFile = (file) => {
+        setIsClickMenu(true)
+        setRenamingFile(true)
+        setViewFile(file)
+
+        setRenamingFolder(false)
+        setViewFolder(null)
+    };
+    const HandleRenameFolder = (folder) => {
+        setIsClickMenu(true)
+        setRenamingFolder(true)
+        setViewFolder(folder)
+
+        setRenamingFile(false)
+        setViewFile(null)
+    };
+    const HandleRemoveFile = async (file) => {
+        const response = await RemoveFileWithFileId(file.file_id)
+    };
+    const HandleRemoveFolder = (folder) => {
+        const response = RemoveFolderWithFolderId(folder.folderId)
+        console.log(response)
+    };
+    const HandleDownloadFile = async (file) => {
+        await DownloadFile(file)
+    };
+    const HandleDownloadFolder = async (folder) => {
+        await DownloadFolder(folder)
+    };
     return (
         <div>
-
+            <div>
+                {isClickMenu &&
+                    <PopupRename isFile={renamingFile}
+                                 isFolder={renamingFolder}
+                                 onClose={async () => await ClosePopupHandler()}
+                                 renameFile={viewFile}
+                                 renameFolder={viewFolder} />
+                }
+            </div>
             <div>
                 {click && <PopupComponent viewFile={viewFile} onClose={async () => await ClosePopupHandler()}/>}
             </div>
 
-            <div onDrop={handleDrag} onDragOver={e => e.preventDefault()}>
+            <div>
                 {!click && (
-                    <Table className="table-dark" style={{backgroundColor: "#272727"}}>
+                    <Table className="table-dark table-hover table-bordered" style={{backgroundColor: "#272727"}}>
                         <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
                         <tr>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Folder</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
-                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Download</th>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Select</th>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}></th>
                         </tr>
                         </thead>
 
@@ -128,6 +173,27 @@ const TableComponent = ({navigateId}) => {
                                     </label>
 
                                 </td>
+
+                                <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
+
+                                    <label style={{ color: "#b2b2b2", textAlign: "center" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+                                            <Dropdown data-bs-theme="dark">
+                                                <Dropdown.Toggle id="dropdown-button-dark-example1" variant="secondary"
+                                                                 style={{width: "100px", height: "30px", backgroundColor: "#272727", borderColor: "#272727"}}>
+                                                    ...
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item onClick={() => HandleDownloadFolder(folder)} href="#">Download</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => HandleRenameFolder(folder)} href="#">Rename</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => HandleRemoveFolder(folder)} href="#">Delete</Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+
+                                        </div>
+                                    </label>
+                                </td>
                             </tr>
                         ))}
 
@@ -158,10 +224,29 @@ const TableComponent = ({navigateId}) => {
                                         </div>
                                     </label>
                                 </td>
+
+                                <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
+
+                                    <label style={{ color: "#b2b2b2", textAlign: "center" }}>
+                                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+                                            <Dropdown data-bs-theme="dark">
+                                                <Dropdown.Toggle id="dropdown-button-dark-example1" variant="secondary"
+                                                                 style={{width: "100px", height: "30px", backgroundColor: "#272727", borderColor: "#272727"}}>
+                                                    ...
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item onClick={() => HandleDownloadFile(file)} href="#">Download</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => HandleRenameFile(file)} href="#">Rename</Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => HandleRemoveFile(file)} href="#">Delete</Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+
+                                        </div>
+                                    </label>
+                                </td>
                             </tr>
                         ))}
-
-
                         </tbody>
                     </Table>)}
 

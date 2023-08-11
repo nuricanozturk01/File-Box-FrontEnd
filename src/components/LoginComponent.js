@@ -1,8 +1,10 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import filebox from "../images/filebox_logo.png"
 import ValidateUser from "../service/LoginService";
 import AlertComponent from "./AlertComponent";
 import {Link} from "react-router-dom";
+import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
+import {Context} from "../Context/ContextProvider";
 
 
 
@@ -10,7 +12,7 @@ const LoginComponent = () => {
 
     const [success, setSuccess] = useState("NONE")
     const [response, setResponse] = useState(null)
-
+    const context = useContext(Context)
 
 
     const [userInput, setUserInput] = useState({
@@ -30,10 +32,10 @@ const LoginComponent = () => {
         localStorage.setItem("token", response.token)
         localStorage.setItem('user_id', response.user_id)
         localStorage.setItem('username', response.username)
+
         // token
         setResponse(response)
         setSuccess(response.success ? "YES" : "NO")
-
     }
 
     function HandlePassword(event) {

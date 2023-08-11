@@ -15,7 +15,7 @@ const ValidateUser = async (userInput) => {
         const response = await axios.post(LOGIN_URL, UserLoginDto);
         await wait(20)
         const responseData = response.data.data
-
+        console.log(response.data.data)
         return {
             username: responseData.username,
             token: responseData.token,
