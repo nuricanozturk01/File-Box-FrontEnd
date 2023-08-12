@@ -1,9 +1,11 @@
 import axios from "axios";
 import {PREFIX} from "../components/Connection";
 
-export const DownloadFile = async (file) =>{
+export const DownloadFile = async (file) =>
+{
 
-    try {
+    try
+    {
         const user_id = localStorage.getItem('user_id');
         const token = localStorage.getItem('token');
         const URL = `${PREFIX}/download/file?fid=${file.file_id}&uid=${user_id}`;
@@ -15,7 +17,7 @@ export const DownloadFile = async (file) =>{
             responseType: 'blob',
         });
 
-        const blob = new Blob([response.data], { type: 'application/octet-stream' });
+        const blob = new Blob([response.data], {type: 'application/octet-stream'});
 
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -26,15 +28,18 @@ export const DownloadFile = async (file) =>{
         document.body.appendChild(link);
         link.click();
         window.URL.revokeObjectURL(url);
-    } catch (error) {
+    } catch (error)
+    {
         console.error('Dosya indirilirken bir hata oluştu:', error);
     }
 }
 
 
-export const DownloadFolder = async (folder) =>{
+export const DownloadFolder = async (folder) =>
+{
 
-    try {
+    try
+    {
         const user_id = localStorage.getItem('user_id');
         const token = localStorage.getItem('token');
         const URL = `${PREFIX}/download/folder?fid=${folder.folderId}&&uid=${user_id}`
@@ -46,7 +51,7 @@ export const DownloadFolder = async (folder) =>{
             responseType: 'blob',
         });
 
-        const blob = new Blob([response.data], { type: 'application/zip' });
+        const blob = new Blob([response.data], {type: 'application/zip'});
 
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -57,7 +62,8 @@ export const DownloadFolder = async (folder) =>{
         document.body.appendChild(link);
         link.click();
         window.URL.revokeObjectURL(url);
-    } catch (error) {
+    } catch (error)
+    {
         console.error('Dosya indirilirken bir hata oluştu:', error);
     }
 }

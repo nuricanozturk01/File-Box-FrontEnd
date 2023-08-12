@@ -3,7 +3,8 @@ import filebox from "../images/password-change-logo.jpg";
 import {ChangePassword, ValidateToken} from "../service/ForgotPasswordService";
 import {useLocation} from "react-router-dom";
 
-const PasswordChangeScreen = () => {
+const PasswordChangeScreen = () =>
+{
 
     const [newPassword, setNewPassword] = useState(null);
     const [newPasswordAgain, setNewPasswordAgain] = useState(null);
@@ -19,7 +20,8 @@ const PasswordChangeScreen = () => {
 
     if (!ValidateToken(currentToken))
         return <h3 style={{backgroundColor: "#ffffff"}}>Please try again!</h3>
-    const HandleSubmitButton = async () => {
+    const HandleSubmitButton = async () =>
+    {
         if (newPassword === newPasswordAgain)
             setIsChangedSuccessfully(await ChangePassword(newPassword, currentToken) ? "YES" : "NO");
 
@@ -29,9 +31,12 @@ const PasswordChangeScreen = () => {
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    useEffect(() => {
-        if (showAlert) {
-            const timer = setTimeout(() => {
+    useEffect(() =>
+    {
+        if (showAlert)
+        {
+            const timer = setTimeout(() =>
+            {
                 setShowAlert(false);
             }, 3000);
             return () => clearTimeout(timer);

@@ -5,8 +5,10 @@ import {PREFIX} from "../components/Connection";
 
 const LOGIN_URL = `${PREFIX}/auth/login/user`
 
-const ValidateUser = async (userInput) => {
-    try {
+const ValidateUser = async (userInput) =>
+{
+    try
+    {
 
         const UserLoginDto = {
             username: userInput.username,
@@ -16,7 +18,8 @@ const ValidateUser = async (userInput) => {
         const response = await axios.post(LOGIN_URL, UserLoginDto);
         await wait(20)
         const responseData = response.data.data
-        console.log(response.data.data)
+
+
         return {
             username: responseData.username,
             token: responseData.token,
@@ -24,7 +27,9 @@ const ValidateUser = async (userInput) => {
             success: true
         };
 
-    } catch (error) {
+    }
+    catch (error)
+    {
         return {
             error,
             success: false

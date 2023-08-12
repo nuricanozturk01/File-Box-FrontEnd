@@ -11,11 +11,9 @@ import {
     FindRootFolderByUserId
 } from "../service/FindFoldersByUserIdAndFolderId";
 
-const TableComponent = ({navigateId}) => {
+const TableComponent = ({navigateId}) =>
+{
     // Listing components
-    const [folderView, setFolderView] = useState([]);
-    const [fileView, setFileView] = useState([]);
-
     const [click, setClick] = useState(false)
 
     const [viewFile, setViewFile] = useState(null)
@@ -28,26 +26,30 @@ const TableComponent = ({navigateId}) => {
 
     const context = useContext(Context)
 
-    useEffect(() => {
-        const fetchData = async () => {
+    useEffect(() =>
+    {
+        const fetchData = async () =>
+        {
             const rootFolder = await FindRootFolderByUserId(localStorage.getItem('user_id'))
             const folders = await FindFoldersByUserIdAndFolderId(rootFolder.folder_id);
             const files = await FindFilesOnFolder(rootFolder.folder_id)
-            setFolderView(folders)
-            setFileView(files)
+            context.setFolderView(folders)
+            context.setFileView(files)
+            context.setRootFolder(rootFolder)
         }
 
         fetchData()
     }, [])
 
-
-    const HandleFolderClick = async (folder) => {
+    const HandleFolderClick = async (folder) =>
+    {
         context.setCurrentFolder(folder)
 
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
-        setFolderView(folders)
-        setFileView(files)
+
+        context.setFolderView(folders)
+        context.setFileView(files)
 
         const newTitle = {
             shortName: folder.folderName,
@@ -59,25 +61,30 @@ const TableComponent = ({navigateId}) => {
     };
 
 
-    function HandleFile(file) {
+    function HandleFile(file)
+    {
         setClick(true)
         setViewFile(file)
     }
 
     // close popup screen
-    const ClosePopupHandler = async () => {
+    const ClosePopupHandler = async () =>
+    {
         setClick(false)
         setIsClickMenu(false)
     };
 
     // For breadcrumb
-    useEffect(() => {
-        if (navigateId > 0 && navigateId !== undefined && navigateId !== null) {
-            const fetchData = async () => {
+    useEffect(() =>
+    {
+        if (navigateId > 0 && navigateId !== undefined && navigateId !== null)
+        {
+            const fetchData = async () =>
+            {
                 const folders = await FindFoldersByUserIdAndFolderId(navigateId);
                 const files = await FindFilesOnFolder(navigateId)
-                setFolderView(folders)
-                setFileView(files)
+                context.setFolderView(folders)
+                context.setFileView(files)
             }
             fetchData()
         }
@@ -85,7 +92,8 @@ const TableComponent = ({navigateId}) => {
     }, [navigateId])
 
 
-    const HandleRenameFile = (file) => {
+    const HandleRenameFile = (file) =>
+    {
         setIsClickMenu(true)
         setRenamingFile(true)
         setViewFile(file)
@@ -93,7 +101,8 @@ const TableComponent = ({navigateId}) => {
         setRenamingFolder(false)
         setViewFolder(null)
     };
-    const HandleRenameFolder = (folder) => {
+    const HandleRenameFolder = (folder) =>
+    {
         setIsClickMenu(true)
         setRenamingFolder(true)
         setViewFolder(folder)
@@ -116,7 +125,9 @@ const TableComponent = ({navigateId}) => {
                         <tr>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Folder</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
-                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Select</th>
+                            {/*<th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Select</th>*/}
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File Size</th>
+
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}></th>
                         </tr>
 
@@ -126,7 +137,7 @@ const TableComponent = ({navigateId}) => {
                         <tbody style={{backgroundColor: "#272727"}}>
 
                         {/*List Folders*/}
-                        {folderView.map((folder, idx) => (
+                        {context.folderView.map((folder, idx) => (
                             <FolderRow
                                 key={idx}
                                 folder={folder}
@@ -137,7 +148,7 @@ const TableComponent = ({navigateId}) => {
 
 
                         {/*List Files*/}
-                        {fileView.map((file, idx) => (
+                        {context.fileView.map((file, idx) => (
                             <FileRow
                                 key={idx}
                                 file={file}

@@ -1,23 +1,37 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {RenameFolderWithFolderId} from "../service/RenameService";
+import {Context} from "../Context/ContextProvider";
 
-const RenameFolder = ({folder}) => {
+const RenameFolder = ({folder}) =>
+{
     const [newFolderName, setNewFolderName] = useState()
     const [renameFolder, setRenameFolder] = useState(null)
-
-    useEffect(() => {
+    const context = useContext(Context)
+    useEffect(() =>
+    {
         setRenameFolder(folder)
     }, [folder])
 
-    const HandleNewFolderName = (event) => {
+    const HandleNewFolderName = (event) =>
+    {
         setNewFolderName(event.target.value)
     };
-    const HandleSubmitButton = async () => {
-        await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
+    const HandleSubmitButton = async () =>
+    {
+
+        try
+        {
+            await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
+
+        }
+        catch (error)
+        {
+
+        }
     };
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div className="form-floating mb-4" style={{ position: "relative" }}>
+        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <div className="form-floating mb-4" style={{position: "relative"}}>
 
                 <label
                     htmlFor="floatingInput"

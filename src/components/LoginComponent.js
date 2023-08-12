@@ -7,8 +7,8 @@ import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId"
 import {Context} from "../Context/ContextProvider";
 
 
-
-const LoginComponent = () => {
+const LoginComponent = () =>
+{
 
     const [success, setSuccess] = useState("NONE")
     const [response, setResponse] = useState(null)
@@ -20,7 +20,8 @@ const LoginComponent = () => {
         password: null, // initial state
     })
 
-    async function HandleLoginButton() {
+    async function HandleLoginButton()
+    {
         setUserInput({
             ...userInput,
             username: userInput.username,
@@ -38,21 +39,24 @@ const LoginComponent = () => {
         setSuccess(response.success ? "YES" : "NO")
     }
 
-    function HandlePassword(event) {
+    function HandlePassword(event)
+    {
         setUserInput({
             ...userInput,
             password: event.target.value,
         })
     }
 
-    function HandleUsername(event) {
+    function HandleUsername(event)
+    {
         setUserInput({
             ...userInput,
             username: event.target.value,
         })
     }
 
-    const ProtectForm = (event) => {
+    const ProtectForm = (event) =>
+    {
         event.preventDefault()
     };
 

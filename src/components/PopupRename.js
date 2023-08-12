@@ -3,17 +3,21 @@ import RenameFile from "./RenameFile";
 import RenameFolder from "./RenameFolder";
 import CreateNewFolder from "./CreateNewFolder";
 
-const PopupRename = ({isFile, isFolder, onClose, renameFile, renameFolder, isNewFolder}) => {
+const PopupRename = ({isFile, isFolder, onClose, renameFile, renameFolder, isNewFolder}) =>
+{
 
-    useEffect(() => {
-        const handleKeyDown = (event) => {
+    useEffect(() =>
+    {
+        const handleKeyDown = (event) =>
+        {
             if (event.keyCode === 0x1B) //esc
                 onClose();
         };
 
         document.addEventListener('keydown', handleKeyDown);
 
-        return () => {
+        return () =>
+        {
             document.removeEventListener('keydown', handleKeyDown);
         };
     }, [onClose]);

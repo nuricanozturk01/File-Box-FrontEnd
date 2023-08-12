@@ -7,14 +7,44 @@ import {Context} from "../Context/ContextProvider";
 import PopupRename from "./PopupRename";
 import UploadComponentFiles from "./UploadComponentFiles";
 import {Dropdown, DropdownButton, NavDropdown} from "react-bootstrap";
+import {
+    FilterFilesByFileExtension,
+    SortFilesByCreationDate,
+    SortFilesByFileSize
+} from "../service/SortAndFilterService";
 
 
-const OptionsNavBar = ({handleFolderClick}) => {
+const OptionsNavBar = ({handleFolderClick}) =>
+{
 
     const context = useContext(Context)
     const [isCreateFolder, setIsCreateFolder] = useState(false)
     const [isClickUploadFolder, setIsClickUploadFolder] = useState(false)
-    const handleLinkClick = async (link, titleItem) => {
+
+    const [selectedExtension, setSelectedExtension] = useState(null);
+
+    const availableExtensions = ['.jpg', '.png', '.pdf', '.docx'];
+
+    const handleExtensionSelect = (extension) =>
+    {
+        setSelectedExtension(extension === selectedExtension ? null : extension);
+    };
+
+    const handleFilter = async () =>
+    {
+        if (selectedExtension)
+        {
+            let folderId = context.rootFolder.folder_id
+            console.log(context.currentFolder)
+            if (context.currentFolder)
+                folderId = context.currentFolder.folderId
+            const data = await FilterFilesByFileExtension(folderId, selectedExtension)
+            context.setFileView(data.files)
+        }
+    };
+
+    const handleLinkClick = async (link, titleItem) =>
+    {
 
         handleFolderClick(titleItem.folderId)
         if (context.title[context.title.length - 1].link === titleItem.link)
@@ -22,12 +52,15 @@ const OptionsNavBar = ({handleFolderClick}) => {
         const items = [];
         let found = false;
 
-        for (let i = 0; i < context.title.length; ++i) {
-            if (context.title[i].link === titleItem.link) {
+        for (let i = 0; i < context.title.length; ++i)
+        {
+            if (context.title[i].link === titleItem.link)
+            {
                 found = true;
             }
 
-            if (!found || (found && context.title[i].link !== titleItem.link)) {
+            if (!found || (found && context.title[i].link !== titleItem.link))
+            {
                 items.push(context.title[i]);
             }
         }
@@ -36,14 +69,40 @@ const OptionsNavBar = ({handleFolderClick}) => {
     };
 
     // close popup screen
-    const ClosePopupHandler = async () => {
+    const ClosePopupHandler = async () =>
+    {
         setIsCreateFolder(false)
     };
-    const HandleCreateFolder = () => {
+    const HandleCreateFolder = () =>
+    {
         setIsCreateFolder(true)
     };
-    const HandleUploadFiles = () => {
+    const HandleUploadFiles = () =>
+    {
         setIsClickUploadFolder(!isClickUploadFolder)
+    };
+
+    const HandleSortFilesByFileSize = async () =>
+    {
+        let folderId = context.rootFolder.folder_id
+
+        if (context.currentFolder)
+            folderId = context.currentFolder.folderId
+
+        const data = await SortFilesByFileSize(folderId)
+
+        context.setFileView(data.files)
+    };
+    const HandleSortFilesByCreationDate = async () =>
+    {
+        let folderId = context.rootFolder.folder_id
+
+        if (context.currentFolder)
+            folderId = context.currentFolder.folderId
+
+        const data = await SortFilesByCreationDate(folderId)
+
+        context.setFileView(data.files)
     };
     return (
         <div>
@@ -63,11 +122,12 @@ const OptionsNavBar = ({handleFolderClick}) => {
                         }}>
                     <Container>
                         <Navbar.Brand href="#home" style={{color: "#B2B2B2", fontSize: "12pt", marginTop: "10px"}}>
-                            <nav aria-label="breadcrumb">
+                            {/* <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb d-flex">
                                     <li className="breadcrumb-item"><a
-                                        href="/mainpage">{localStorage.getItem('username')}</a>
+                                        href="/home">{localStorage.getItem('username')}</a>
                                     </li>
+
                                     <Context.Consumer>
                                         {context => (
                                             <>
@@ -80,8 +140,9 @@ const OptionsNavBar = ({handleFolderClick}) => {
                                             </>
                                         )}
                                     </Context.Consumer>
+
                                 </ol>
-                            </nav>
+                            </nav>*/}
                         </Navbar.Brand>
 
                         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
@@ -91,19 +152,46 @@ const OptionsNavBar = ({handleFolderClick}) => {
 
                             </Nav>
                             <Nav className="ml-auto">
-                                <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleCreateFolder}>Create Folder</Nav.Link>
-                                <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFiles}>Upload Files</Nav.Link>
-
+                                <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleCreateFolder}>Create
+                                    Folder</Nav.Link>
                                 <Nav.Link disabled={true}>|</Nav.Link>
+                                <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFiles}>Upload
+                                    Files</Nav.Link>
+
+                                <Nav.Link disabled={true}>||</Nav.Link>
+
 
                                 <NavDropdown title="Sort By">
-                                    <NavDropdown.Item style={{backgroundColor: "#272727"}} href="#action/3.1">Date</NavDropdown.Item>
-                                    <NavDropdown.Item style={{backgroundColor: "#272727"}} href="#action/3.1">File Size</NavDropdown.Item>
-                                </NavDropdown>
-
-                                <NavDropdown title="Filter By">
                                     <NavDropdown.Item style={{backgroundColor: "#272727"}}
-                                                      href="#action/3.1">Extension</NavDropdown.Item>
+                                                      href="#action/3.1"
+                                                      onClick={HandleSortFilesByCreationDate}>
+
+                                        Date
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item style={{backgroundColor: "#272727"}}
+                                                      href="#action/3.1"
+                                                      onClick={HandleSortFilesByFileSize}>
+                                        File Size</NavDropdown.Item>
+                                </NavDropdown>
+                                <Nav.Link disabled={true}>|</Nav.Link>
+                                <NavDropdown title="Filter By">
+                                    {availableExtensions.map(extension => (
+                                        <NavDropdown.Item
+                                            key={extension}
+                                            style={{
+                                                backgroundColor: "#272727",
+                                                color: selectedExtension === extension ? 'white' : '#b2b2b2'
+                                            }}
+                                            onClick={() => handleExtensionSelect(extension)}
+                                        >
+                                            {extension}
+                                        </NavDropdown.Item>
+                                    ))}
+                                    <NavDropdown.Divider/>
+                                    <NavDropdown.Item style={{backgroundColor: "#272727", color: 'white'}}
+                                                      onClick={handleFilter}>
+                                        Apply Filter
+                                    </NavDropdown.Item>
                                 </NavDropdown>
 
                             </Nav>

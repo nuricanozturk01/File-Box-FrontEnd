@@ -3,28 +3,45 @@ import {Context} from "../Context/ContextProvider";
 import {CreateFolder} from "../service/UploadService";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 
-const CreateNewFolder = () => {
+const CreateNewFolder = () =>
+{
     const context = useContext(Context)
     const [rootFolder, setRootFolder] = useState()
     const [newFolderName, setNewFolderName] = useState()
-    useEffect(() => {
-        const findRoot = async () => {
+    useEffect(() =>
+    {
+        const findRoot = async () =>
+        {
             const root = await FindRootFolderByUserId();
             setRootFolder(root.folder_id)
         }
         findRoot()
 
     }, [])
-    const HandleNewFolderName = (event) => {
+    const HandleNewFolderName = (event) =>
+    {
         setNewFolderName(event.target.value)
     };
-    const HandleSubmitButton = async () => {
+    const HandleSubmitButton = async () =>
+    {
         let folderId = await rootFolder;
 
         if (context.currentFolder && context.currentFolder.folderId)
             folderId = context.currentFolder.folderId
 
-        await CreateFolder(folderId, newFolderName)
+        const response = await CreateFolder(folderId, newFolderName)
+
+        console.log(response)
+
+        const dto = {
+            creationDate: new Date().toLocaleDateString(),
+            folderId: response.folderId,
+            folderName: response.folder_name,
+            folderPath: response.folder_path,
+            folder_files: []
+        }
+        console.log(dto)
+        context.setFolderView(prev => [...prev, dto])
     };
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>

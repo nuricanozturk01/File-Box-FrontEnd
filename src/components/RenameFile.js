@@ -1,24 +1,30 @@
 import React, {useEffect, useState} from "react";
 import {RenameFileWithFileId} from "../service/RenameService";
-import './Rename.css'
-const RenameFile = ({file}) => {
+import './DropDown.css'
+
+const RenameFile = ({file}) =>
+{
     const [newFileName, setNewFileName] = useState()
     const [renameFile, setRenameFile] = useState(null)
-    
-    useEffect(() => {
+
+    useEffect(() =>
+    {
         setRenameFile(file)
-    },[file])
-    
-    const HandleNewFileName = (event) => {
+    }, [file])
+
+    const HandleNewFileName = (event) =>
+    {
         setNewFileName(event.target.value)
     };
-    const HandleSubmitButton = async () => {
-        console.log("ADSAS: ", renameFile)
+    const HandleSubmitButton = async () =>
+    {
         await RenameFileWithFileId(renameFile.file_id, newFileName)
     };
+
+
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div className="form-floating mb-4" style={{ position: "relative" }}>
+        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <div className="form-floating mb-4" style={{position: "relative"}}>
 
                 <label
                     htmlFor="floatingInput"

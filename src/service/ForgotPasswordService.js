@@ -4,8 +4,10 @@ import {PREFIX} from "../components/Connection";
 /*
     Validate the password with given email
  */
-const ValidatePassword = async (email) => {
-    try {
+const ValidatePassword = async (email) =>
+{
+    try
+    {
         const CHANGE_PASSWORD_REQUEST_URL = `${PREFIX}/change/password?email=${email}`;
         const response = await axios.post(CHANGE_PASSWORD_REQUEST_URL);
         const responseData = response.data.data
@@ -16,7 +18,9 @@ const ValidatePassword = async (email) => {
             success: true
         };
 
-    } catch (error) {
+    }
+    catch (error)
+    {
         return {
             error,
             success: false
@@ -27,12 +31,16 @@ const ValidatePassword = async (email) => {
 /*
     Change Password
  */
-export const ChangePassword = async (newPassword, token) => {
-    try {
+export const ChangePassword = async (newPassword, token) =>
+{
+    try
+    {
         const CHANGE_PASSWORD_URL = `${PREFIX}/change/reset-password?token=${token}&&p=${newPassword}`
         await axios.post(CHANGE_PASSWORD_URL);
         return true;
-    } catch (error) {
+    }
+    catch (error)
+    {
         return false;
     }
 }
@@ -40,13 +48,17 @@ export const ChangePassword = async (newPassword, token) => {
 /*
     Validate the reset password token
  */
-export const ValidateToken = async (token) => {
-    try {
+export const ValidateToken = async (token) =>
+{
+    try
+    {
         const FIND_USER_BY_RESET_PASSWORD_TOKEN = `${PREFIX}/auth/find/user/token?token=${token}`
         const response = await axios.get(FIND_USER_BY_RESET_PASSWORD_TOKEN);
         const responseData = response.data.data.token
         return responseData.token === token;
-    } catch (error) {
+    }
+    catch (error)
+    {
         return error.response.data.success
     }
 }

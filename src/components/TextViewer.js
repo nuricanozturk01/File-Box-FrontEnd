@@ -4,22 +4,27 @@ import {highlight, languages} from 'prismjs';
 import 'prismjs/themes/prism.css';
 
 
-const TextViewer = ({filePath}) => {
+const TextViewer = ({filePath}) =>
+{
     const [code, setCode] = useState("");
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         fetch(require('../components/file_box/' + filePath.file_path.replace(/\\/g, '/')))
             .then(response => response.text())
-            .then(data => {
+            .then(data =>
+            {
                 setCode(data);
             })
-            .catch(error => {
+            .catch(error =>
+            {
                 console.error("Hata:", error);
             });
         console.log(code)
     }, [filePath]);
 
-    const handleChange = newCode => {
+    const handleChange = newCode =>
+    {
         setCode(newCode);
     };
 

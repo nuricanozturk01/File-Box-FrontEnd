@@ -1,6 +1,7 @@
 import React from "react";
 
-const ImageViewer = ({filePath}) => {
+const ImageViewer = ({filePath}) =>
+{
 
     return (
         <div>

@@ -6,16 +6,22 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 
-const PdfViewer = (viewFile) => {
+const PdfViewer = (viewFile) =>
+{
 
     const [pdfFile, setPdfFile] = useState();
 
-    useEffect(() => {
-        const load = async () => {
-            try {
+    useEffect(() =>
+    {
+        const load = async () =>
+        {
+            try
+            {
                 const realPath = viewFile.file.file_path.replace(/\\/g, '/');
                 setPdfFile(realPath);
-            } catch (error) {
+            }
+            catch (error)
+            {
                 console.error("Error while setting pdfFile:", error);
             }
         };

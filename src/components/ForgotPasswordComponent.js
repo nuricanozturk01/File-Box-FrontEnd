@@ -2,15 +2,18 @@ import React, {useState} from "react";
 import filebox from "../images/filebox_logo.png";
 import ValidatePassword from "../service/ForgotPasswordService";
 
-const ForgotPasswordComponent = () => {
+const ForgotPasswordComponent = () =>
+{
     const [email, setEmail] = useState(null);
 
 
-    const HandleEmail = (event) => {
+    const HandleEmail = (event) =>
+    {
         setEmail(event.target.value)
     };
 
-    const HandleSubmitButton = async () => {
+    const HandleSubmitButton = async () =>
+    {
 
         const response = await ValidatePassword(email);
         console.log(response)
