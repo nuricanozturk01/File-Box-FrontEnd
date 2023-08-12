@@ -20,7 +20,7 @@ const PopupComponent = ({viewFile, onClose}) => {
 
         if (file_type === ".pdf")
             setIsPdf(true)
-        else if ([".txt", ".java", ".css", ".json", ".cs", ".sh"].includes(file_type))
+        else if ([".txt", ".java", ".css", ".json", ".cs", ".sh",".c"].includes(file_type))
             setIsText(true)
         else if ([".jpg", ".png"].includes(file_type))
             setIsImage(true)

@@ -1,11 +1,12 @@
 import axios from "axios";
+import {PREFIX} from "../components/Connection";
 
 export const DownloadFile = async (file) =>{
 
     try {
         const user_id = localStorage.getItem('user_id');
         const token = localStorage.getItem('token');
-        const URL = `http://localhost:5299/api/download/file?fid=${file.file_id}&uid=${user_id}`;
+        const URL = `${PREFIX}/download/file?fid=${file.file_id}&uid=${user_id}`;
 
         const response = await axios.get(URL, {
             headers: {
@@ -36,7 +37,7 @@ export const DownloadFolder = async (folder) =>{
     try {
         const user_id = localStorage.getItem('user_id');
         const token = localStorage.getItem('token');
-        const URL = `http://localhost:5299/api/download/folder?fid=${folder.folderId}&&uid=${user_id}`
+        const URL = `${PREFIX}/download/folder?fid=${folder.folderId}&&uid=${user_id}`
 
         const response = await axios.get(URL, {
             headers: {

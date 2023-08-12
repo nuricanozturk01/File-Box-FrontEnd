@@ -1,8 +1,9 @@
 import axios from 'axios'
 import {wait} from "@testing-library/user-event/dist/utils";
+import {PREFIX} from "../components/Connection";
 
 
-const LOGIN_URL = "http://localhost:5299/api/auth/login/user"
+const LOGIN_URL = `${PREFIX}/auth/login/user`
 
 const ValidateUser = async (userInput) => {
     try {

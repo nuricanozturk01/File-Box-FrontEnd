@@ -93,7 +93,7 @@ const LoginComponent = () => {
                         </div>
 
                         <div className="text-center mb-4">
-                            <Link to="/mainpage">
+                            <Link to="/home">
                                 <button onClick={HandleLoginButton}
                                         className="btn btn-primary w-10 py-2"
                                         style={{

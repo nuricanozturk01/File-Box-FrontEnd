@@ -6,14 +6,14 @@ import Navbar from 'react-bootstrap/Navbar';
 
 const NavBar = () => {
     return (
-        <Navbar bg="dark" data-bs-theme="dark" className="bg-body-tertiary justify-content-between">
+        <Navbar style={{backgroundColor: "#202020"}}>
             <Container>
-                <Navbar.Brand>FileBox</Navbar.Brand>
-                <Navbar.Brand href="/mainpage">Home</Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+                <Navbar.Brand href="/" style={{color: "#c5c5c5"}}>FileBox</Navbar.Brand>
+                <Navbar.Brand style={{color: "#c5c5c5"}} href="/home">Home</Navbar.Brand>
+
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="ms-auto">
-                        <Nav.Link href="api/auth/logout">Logout</Nav.Link>
+                        <Nav.Link style={{color: "#c5c5c5"}} href="#">Logout</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

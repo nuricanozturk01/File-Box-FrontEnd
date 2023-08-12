@@ -15,12 +15,12 @@ const MainPage = () => {
 
 
     return (
-        <div className="grid" style={{backgroundColor: "#1c1c1c", height: "100v", width: "100%"}}>
+        <div className="grid" style={{backgroundColor: "#1c1c1c", height: "100v", width: "100v"}}>
             <Navbar/>
             <div className="container" style={{padding: "0 0px"}}>
                 <div className="row column-gap-12 row-cols-0 row-gap-5 row-cols-md-12 row-cols-lg-12">
-                    <UploadComponentFiles/>
-                    <UploadFolderComponent/>
+                    {/*<UploadComponentFiles/>*/}
+                   {/* <UploadFolderComponent/>*/}
                     <OptionsNavBar handleFolderClick={handleFolderClick}/>
                     <TableComponent navigateId={folder}/>
                 </div>

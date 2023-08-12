@@ -1,9 +1,10 @@
 import axios from "axios";
+import {PREFIX} from "../components/Connection";
 export const UploadFiles = async (folderId, selectedFiles) => {
     try {
 
         const userId = localStorage.getItem('user_id')
-        const URL = `http://localhost:5299/api/upload/files?uid=${userId}&fid=${folderId}`;
+        const URL = `${PREFIX}/upload/files?uid=${userId}&fid=${folderId}`;
         const formData = new FormData();
 
         for (let i = 0; i < selectedFiles.length; i++)
@@ -23,7 +24,7 @@ export const UploadFiles = async (folderId, selectedFiles) => {
 }
 export const CreateFolder = async (folderId, folderName) => {
     try {
-        const CREATE_FOLDER_URL = "http://localhost:5299/api/folder/create"
+        const CREATE_FOLDER_URL = `${PREFIX}/folder/create`
 
         const createNewFolderDTO = {
             new_folder_name: folderName,

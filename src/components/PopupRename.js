@@ -1,8 +1,9 @@
 import React, {useEffect} from "react";
 import RenameFile from "./RenameFile";
 import RenameFolder from "./RenameFolder";
+import CreateNewFolder from "./CreateNewFolder";
 
-const PopupRename = ({isFile, isFolder,onClose, renameFile, renameFolder}) => {
+const PopupRename = ({isFile, isFolder, onClose, renameFile, renameFolder, isNewFolder}) => {
 
     useEffect(() => {
         const handleKeyDown = (event) => {
@@ -19,9 +20,10 @@ const PopupRename = ({isFile, isFolder,onClose, renameFile, renameFolder}) => {
 
     return (
         <div className="modal-overlay">
-
+            {isNewFolder && <CreateNewFolder/>}
             {isFile && renameFile !== undefined && renameFile !== null && <RenameFile file={renameFile}/>}
             {isFolder && renameFolder !== undefined && renameFolder !== null && <RenameFolder folder={renameFolder}/>}
+
             <div className="modal">
 
             </div>

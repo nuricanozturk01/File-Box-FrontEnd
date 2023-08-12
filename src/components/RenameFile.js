@@ -23,6 +23,7 @@ const RenameFile = ({file}) => {
                 <label
                     htmlFor="floatingInput"
                     style={{
+                        backgroundColor: "#1c1c1c",
                         color: "#b2b2b2",
                         marginBottom: "0px",
                         position: "inherit",

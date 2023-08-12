@@ -1,36 +1,48 @@
-import React, {useEffect, useState} from "react";
-import {RenameFolderWithFolderId} from "../service/RenameService";
+import React, {useContext, useEffect, useState} from "react";
+import {Context} from "../Context/ContextProvider";
+import {CreateFolder} from "../service/UploadService";
+import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 
-const RenameFolder = ({folder}) => {
+const CreateNewFolder = () => {
+    const context = useContext(Context)
+    const [rootFolder, setRootFolder] = useState()
     const [newFolderName, setNewFolderName] = useState()
-    const [renameFolder, setRenameFolder] = useState(null)
-
     useEffect(() => {
-        setRenameFolder(folder)
-    }, [folder])
+        const findRoot = async () => {
+            const root = await FindRootFolderByUserId();
+            setRootFolder(root.folder_id)
+        }
+        findRoot()
 
+    }, [])
     const HandleNewFolderName = (event) => {
         setNewFolderName(event.target.value)
     };
     const HandleSubmitButton = async () => {
-        await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
+        let folderId = await rootFolder;
+
+        if (context.currentFolder && context.currentFolder.folderId)
+            folderId = context.currentFolder.folderId
+
+        await CreateFolder(folderId, newFolderName)
     };
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div className="form-floating mb-4" style={{ position: "relative" }}>
+        <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            <div className="form-floating mb-4" style={{position: "relative"}}>
 
                 <label
                     htmlFor="floatingInput"
                     style={{
                         backgroundColor: "#1c1c1c",
                         color: "#b2b2b2",
+                        marginBottom: "0px",
                         position: "inherit",
                         top: "50%",
                         left: "50%",
                         borderColor: "#b2b2b2",
                         transform: "translate(-50%, -50%)"
                     }}>
-                    Please Enter the New Folder Name
+                    Please Enter the Folder Name
                 </label>
                 <input
                     type="text"
@@ -57,11 +69,9 @@ const RenameFolder = ({folder}) => {
                     color: "#B2B2B2",
                     borderColor: "#808080",
                 }} type="submit">
-                Rename
+                Create Folder
             </button>
         </div>
-
     );
 }
-
-export default RenameFolder;
+export default CreateNewFolder;

@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     {path: '/', element: <LoginComponent/>},
     {path: '/forgot-password', element: <ForgotPasswordComponent/>},
     {path: '/reset-password-request', element: <PasswordChangeScreen/>},
-    {path: '/mainpage', element: <MainPage/>}
+    {path: '/home', element: <MainPage/>}
 
 ])
 
