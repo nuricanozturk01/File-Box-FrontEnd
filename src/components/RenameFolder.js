@@ -15,14 +15,23 @@ const RenameFolder = ({folder}) =>
     const HandleNewFolderName = (event) =>
     {
         setNewFolderName(event.target.value)
+
     };
     const HandleSubmitButton = async () =>
     {
 
         try
         {
-            await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
+            const response = await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
 
+            context.folderView
+                        .filter(fw => fw.folderId === folder.folderId)
+                        .map(fw => {
+                            fw.creationDate = response.folder.creationDate;
+                            fw.folderPath = response.folder.folderPath;
+                            fw.folderId = response.folder.folderId;
+                            fw.folderName = response.folder.folderName
+                        })
         }
         catch (error)
         {

@@ -46,10 +46,16 @@ const OptionsNavBar = ({handleFolderClick}) =>
     const handleLinkClick = async (link, titleItem) =>
     {
 
-        handleFolderClick(titleItem.folderId)
+        console.log(titleItem)
+        await handleFolderClick(titleItem.folderId)
+
+        console.log('CF: ', context.currentFolder)
+
         if (context.title[context.title.length - 1].link === titleItem.link)
             return
+
         const items = [];
+
         let found = false;
 
         for (let i = 0; i < context.title.length; ++i)
@@ -57,6 +63,8 @@ const OptionsNavBar = ({handleFolderClick}) =>
             if (context.title[i].link === titleItem.link)
             {
                 found = true;
+                items.push(context.title[i]);
+                break
             }
 
             if (!found || (found && context.title[i].link !== titleItem.link))
@@ -122,7 +130,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
                         }}>
                     <Container>
                         <Navbar.Brand href="#home" style={{color: "#B2B2B2", fontSize: "12pt", marginTop: "10px"}}>
-                            {/* <nav aria-label="breadcrumb">
+                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb d-flex">
                                     <li className="breadcrumb-item"><a
                                         href="/home">{localStorage.getItem('username')}</a>
@@ -142,7 +150,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
                                     </Context.Consumer>
 
                                 </ol>
-                            </nav>*/}
+                            </nav>
                         </Navbar.Brand>
 
                         <Navbar.Toggle aria-controls="basic-navbar-nav"/>

@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {UploadFiles} from "../service/UploadService";
 import {Context} from "../Context/ContextProvider";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
+import {Status} from "../Status";
 
 const DragDrop = () =>
 {
@@ -42,22 +43,48 @@ const DragDrop = () =>
         e.preventDefault();
         e.stopPropagation();
     };
-
+    const loadData = (responseData) =>
+    {
+        for (let i = 0; i < responseData.files.length; ++i)
+        {
+            const file = responseData.files[i]
+            const dto = {
+                created_date: file.created_date,
+                file_byte: file.file_byte,
+                file_id: file.file_id,
+                file_name: file.file_name,
+                file_path: file.file_path,
+                file_type: file.file_type,
+                real_path: file.real_path
+            }
+            context.setFileView(prev => [...prev, dto])
+        }
+    };
     const handleDrop = async (e) =>
     {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragging(false);
-        console.log(rootFolder)
-        const files = [...e.dataTransfer.files];
+        try
+        {
+            e.preventDefault();
+            e.stopPropagation();
+            setDragging(false);
 
-        let folderId = await rootFolder.folder_id;
-        console.log(context.currentFolder)
-        if (context.currentFolder)
-            folderId = context.currentFolder.folderId
+            const files = [...e.dataTransfer.files];
 
-        await UploadFiles(folderId, files)
-        console.log('Dropped files:', files);
+            let folderId = await rootFolder.folder_id;
+
+            if (context.currentFolder)
+                folderId = context.currentFolder.folderId
+
+            const response = await UploadFiles(folderId, files)
+            context.setUploadFileStatus(Status.Success)
+            context.setShowAlert(true)
+            await loadData(response)
+        }
+        catch (error)
+        {
+            context.setUploadFileStatus(Status.Fail)
+            context.setShowAlert(true)
+        }
     };
 
     return (

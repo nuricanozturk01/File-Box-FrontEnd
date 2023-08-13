@@ -25,6 +25,24 @@ const UploadComponentFiles = () =>
         findRoot()
 
     }, [])
+
+    const loadData = (responseData) =>
+    {
+        for (let i = 0; i < responseData.files.length; ++i)
+        {
+            const file = responseData.files[i]
+            const dto = {
+                created_date: file.created_date,
+                file_byte: file.file_byte,
+                file_id: file.file_id,
+                file_name: file.file_name,
+                file_path: file.file_path,
+                file_type: file.file_type,
+                real_path: file.real_path
+            }
+            context.setFileView(prev => [...prev, dto])
+        }
+    };
     const HandleUploadButton = async () =>
     {
         let folderId = await rootFolder;
@@ -34,13 +52,14 @@ const UploadComponentFiles = () =>
 
         try
         {
-            await UploadFiles(folderId, selectedFiles)
-            context.setDownloadFileStatus(Status.Success)
+             const responseData = await UploadFiles(folderId, selectedFiles)
+             await loadData(responseData)
+            context.setUploadFileStatus(Status.Success)
             context.setShowAlert(true)
         }
         catch (error)
         {
-            context.setDownloadFileStatus(Status.Fail)
+            context.setUploadFileStatus(Status.Fail)
             context.setShowAlert(true)
         }
     };

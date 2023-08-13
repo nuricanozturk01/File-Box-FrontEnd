@@ -15,16 +15,29 @@ import video_image from "../images/video-course-svgrepo-com.svg";
 import music_image from "../images/music-svgrepo-com.svg";
 import text_image from "../images/clipboard-list-svgrepo-com.svg";
 import zip_image from "../images/zip-svgrepo-com.svg";
+import powerpoint_image from "../images/powerpoint2-svgrepo-com.svg";
 import {RemoveFileWithFileId} from "../service/RemoveService";
 import {DownloadFile} from "../service/DownloadService";
 import {Context} from "../Context/ContextProvider";
+import {Status} from "../Status";
 
 const FileRow = ({file, handleFile, handleRenameFile}) =>
 {
     const context = useContext(Context)
     const HandleDownloadFile = async (file) =>
     {
-        await DownloadFile(file)
+        try
+        {
+            await DownloadFile(file)
+            context.setDownloadFileStatus(Status.Success)
+            context.setShowAlert(true)
+        }
+        catch (error)
+        {
+            console.log(error)
+            context.setDownloadFileStatus(Status.Fail)
+            context.setShowAlert(true)
+        }
     };
 
     const HandleRemoveFile = async (file) =>
@@ -91,6 +104,10 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
         else if (['.exe'].includes(file.file_type))
         {
             return exe_file;
+        }
+        else if (['.ppt', '.pptx'].includes(file.file_type))
+        {
+            return powerpoint_image;
         }
         return file_image;
     };

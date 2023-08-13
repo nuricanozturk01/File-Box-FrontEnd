@@ -32,7 +32,6 @@ export const RenameFolderWithFolderId = async (folderId, newName) =>
         try
         {
             const response = await axios.post(URL, {}, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
-            console.log(response)
             return response.data.data
         }
         catch (error)

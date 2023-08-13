@@ -1,20 +1,16 @@
 import React, {useContext, useState} from "react";
 import filebox from "../images/filebox_logo.png"
 import ValidateUser from "../service/LoginService";
-import AlertComponent from "./AlertComponent";
-import {Link} from "react-router-dom";
-import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
+import {Link, Navigate} from "react-router-dom";
 import {Context} from "../Context/ContextProvider";
+import {Status} from "../Status";
 
 
 const LoginComponent = () =>
 {
 
-    const [success, setSuccess] = useState("NONE")
     const [response, setResponse] = useState(null)
     const context = useContext(Context)
-
-
     const [userInput, setUserInput] = useState({
         username: null, // initial state
         password: null, // initial state
@@ -29,14 +25,19 @@ const LoginComponent = () =>
         })
 
         const response = await ValidateUser(userInput);
-        // console.log(response)
-        localStorage.setItem("token", response.token)
-        localStorage.setItem('user_id', response.user_id)
-        localStorage.setItem('username', response.username)
+        if (!response.success)
+            context.setLoginStatus(Status.Fail)
+        else
+        {
+            localStorage.setItem("token", response.token)
+            localStorage.setItem('user_id', response.user_id)
+            localStorage.setItem('username', response.username)
 
-        // token
-        setResponse(response)
-        setSuccess(response.success ? "YES" : "NO")
+            // token
+            setResponse(response)
+            context.setLoginStatus(Status.Success)
+            context.setShowAlert(true)
+        }
     }
 
     function HandlePassword(event)
@@ -64,8 +65,7 @@ const LoginComponent = () =>
     return (
 
         <div className="container">
-            {success === "NO" && success !== "NONE" &&
-                <AlertComponent variant="danger" message="User or Password is wrong!" title="FAIL!" prefix=""/>}
+            {context.loginStatus !== Status.None && context.loginStatus === Status.Success && <Navigate to="/home"/>}
             <div className="row d-flex align-items-center justify-content-center" style={{height: "100vh"}}>
                 <div className="col-md-6">
                     <form style={{margin: "10px"}} onClick={ProtectForm}>
@@ -97,17 +97,15 @@ const LoginComponent = () =>
                         </div>
 
                         <div className="text-center mb-4">
-                            <Link to="/home">
-                                <button onClick={HandleLoginButton}
-                                        className="btn btn-primary w-10 py-2"
-                                        style={{
-                                            backgroundColor: "#272727",
-                                            color: "#B2B2B2",
-                                            borderColor: "#808080"
-                                        }}
-                                        type="submit">Login
-                                </button>
-                            </Link>
+                            <button onClick={HandleLoginButton}
+                                    className="btn btn-primary w-10 py-2"
+                                    style={{
+                                        backgroundColor: "#272727",
+                                        color: "#B2B2B2",
+                                        borderColor: "#808080"
+                                    }}
+                                    type="submit">Login
+                            </button>
                             <hr/>
                             <Link to="/forgot-password">
                                 <button

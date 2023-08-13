@@ -39,7 +39,8 @@ const TextViewer = ({filePath}) =>
                 fontFamily: '"Fira code", "Fira Mono", monospace',
                 fontSize: 16,
                 color: '#b2b2b2',
-                maxHeight: '700px'
+                maxHeight: '700px',
+                backgroundColor: "#212121"
             }}
         />
     );

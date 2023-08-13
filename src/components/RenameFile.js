@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {RenameFileWithFileId} from "../service/RenameService";
 import './DropDown.css'
+import {Context} from "../Context/ContextProvider";
 
 const RenameFile = ({file}) =>
 {
     const [newFileName, setNewFileName] = useState()
     const [renameFile, setRenameFile] = useState(null)
-
+    const context = useContext(Context)
     useEffect(() =>
     {
         setRenameFile(file)
@@ -18,7 +19,16 @@ const RenameFile = ({file}) =>
     };
     const HandleSubmitButton = async () =>
     {
-        await RenameFileWithFileId(renameFile.file_id, newFileName)
+        const response = await RenameFileWithFileId(renameFile.file_id, newFileName)
+
+        context.fileView
+            .filter(fw => fw.file_id === file.file_id)
+            .map(fw => {
+                fw.file_name = newFileName;
+                fw.file_path = response.file.file_path;
+                fw.created_date = response.file.created_date;
+                fw.real_path = response.file.real_path
+            })
     };
 
 

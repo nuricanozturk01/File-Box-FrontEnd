@@ -43,14 +43,17 @@ const TableComponent = ({navigateId}) =>
 
     const HandleFolderClick = async (folder) =>
     {
-        context.setCurrentFolder(folder)
+
+
 
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
-
+        console.log('NID: ', navigateId)
         context.setFolderView(folders)
         context.setFileView(files)
-
+        console.log("ON T: ", folder)
+        await context.setCurrentFolder(folder)
+        console.log('C: ', context.currentFolder)
         const newTitle = {
             shortName: folder.folderName,
             link: folder.folderPath,

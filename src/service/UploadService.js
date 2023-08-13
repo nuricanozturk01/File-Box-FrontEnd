@@ -12,11 +12,10 @@ export const UploadFiles = async (folderId, selectedFiles) =>
         for (let i = 0; i < selectedFiles.length; i++)
             formData.append('formFile', selectedFiles[i]);
 
-
         try
         {
             const response = await axios.post(URL, formData, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
-            console.log(response.data.data)
+            return response.data.data
         }
         catch (error)
         {
