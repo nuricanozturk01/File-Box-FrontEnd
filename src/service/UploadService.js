@@ -1,6 +1,7 @@
 import axios from "axios";
 import {PREFIX} from "../components/Connection";
 
+
 export const UploadFiles = async (folderId, selectedFiles) =>
 {
     try
@@ -14,17 +15,37 @@ export const UploadFiles = async (folderId, selectedFiles) =>
 
         try
         {
-            const response = await axios.post(URL, formData, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
+            const response = await axios.post(URL, formData, {
+                headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`},
+                /*onUploadProgress: progressEvent => setUploadProgress(progressEvent.progress)*/
+            });
             return response.data.data
-        }
-        catch (error)
+        } catch (error)
         {
             console.error('Error uploading files:', error);
         }
     } catch (error)
     {
-
+        console.error('Error uploading files:', error);
     }
+}
+export const UploadFilesCallback = async (folderId, selectedFiles, callback) =>
+{
+    const userId = localStorage.getItem('user_id')
+    const URL = `${PREFIX}/upload/files?uid=${userId}&fid=${folderId}`;
+    const formData = new FormData();
+
+    for (let i = 0; i < selectedFiles.length; i++)
+        formData.append('formFile', selectedFiles[i]);
+
+    return axios.post(URL, formData, {
+        headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`},
+        onUploadProgress: (progressEvent) => callback(Math.round((progressEvent.loaded / progressEvent.total) * 100))})
+        .then(response => response.data.data)
+        .catch(error =>
+        {
+            throw error
+        });
 }
 export const CreateFolder = async (folderId, folderName) =>
 {
@@ -44,13 +65,11 @@ export const CreateFolder = async (folderId, folderName) =>
             const response = await axios.post(CREATE_FOLDER_URL, createNewFolderDTO, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
             console.log(response.data.data)
             return response.data.data;
-        }
-        catch (error)
+        } catch (error)
         {
             console.error('Error uploading files:', error);
         }
-    }
-    catch (error)
+    } catch (error)
     {
 
     }

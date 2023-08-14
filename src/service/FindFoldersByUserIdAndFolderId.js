@@ -62,3 +62,21 @@ export const FindRootFolderByUserId = async () =>
         console.error('Error fetching data:', error);
     }
 }
+
+
+export const FindFolderByFolderId = async (folderId) =>
+{
+    try
+    {
+        const user_id = localStorage.getItem('user_id');
+        const token = localStorage.getItem('token');
+
+        const URL = `${PREFIX}/folder/find/folder?id=${user_id}&&fid=${folderId}`;
+        const response = await axios.get(URL, {headers: {"Authorization": `Bearer ${token}`}});
+        return response.data.data.folder;
+    }
+    catch (error)
+    {
+        console.log(error)
+    }
+}

@@ -35,7 +35,6 @@ const TableComponent = ({navigateId}) =>
             const files = await FindFilesOnFolder(rootFolder.folder_id)
             context.setFolderView(folders)
             context.setFileView(files)
-            //context.setAvailableExtensions(context.fileView.map(fw => fw.file_type))
             context.setRootFolder(rootFolder)
         }
 
@@ -44,13 +43,13 @@ const TableComponent = ({navigateId}) =>
 
     const HandleFolderClick = async (folder) =>
     {
+        context.setCurrentFolder(folder)
+
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
 
         context.setFolderView(folders)
         context.setFileView(files)
-
-        await context.setCurrentFolder(folder)
 
         const newTitle = {
             shortName: folder.folderName,
@@ -115,12 +114,12 @@ const TableComponent = ({navigateId}) =>
 
     return (
         <div>
+
             <div>
 
                 {!click && (
 
                     <Table className="table-dark table-hover table-bordered" style={{backgroundColor: "#272727"}}>
-
                         <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
 
                         <tr>

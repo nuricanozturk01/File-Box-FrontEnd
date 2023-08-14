@@ -1,17 +1,21 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-
 import {Context} from "../Context/ContextProvider";
 import PopupRename from "./PopupRename";
-import UploadComponentFiles from "./UploadComponentFiles";
-import {Dropdown, DropdownButton, NavDropdown} from "react-bootstrap";
+import {NavDropdown} from "react-bootstrap";
 import {
     FilterFilesByFileExtension,
     SortFilesByCreationDate,
     SortFilesByFileSize
 } from "../service/SortAndFilterService";
+import UploadComponentFiles from "./UploadComponentFiles";
+import {
+    FindFilesOnFolder,
+    FindFolderByFolderId,
+    FindFoldersByUserIdAndFolderId
+} from "../service/FindFoldersByUserIdAndFolderId";
 
 
 const OptionsNavBar = ({handleFolderClick}) =>
@@ -20,7 +24,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
     const context = useContext(Context)
     const [isCreateFolder, setIsCreateFolder] = useState(false)
     const [isClickUploadFolder, setIsClickUploadFolder] = useState(false)
-    //const [availableExtensions, setAvailableExtensions] = useState()
+
     const [selectedExtension, setSelectedExtension] = useState(null);
     const availableExtensions = ['.jpg', '.png', '.pdf', '.docx'];
 
@@ -28,10 +32,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
     {
         setSelectedExtension(extension === selectedExtension ? null : extension);
     };
-    /*useEffect(() => {
-        if (context.fileView)
-            setAvailableExtensions(context.fileView.map(fw => fw.file_type))
-    },[context.fileView])*/
+
     const handleFilter = async () =>
     {
         if (selectedExtension)
@@ -44,13 +45,35 @@ const OptionsNavBar = ({handleFolderClick}) =>
         }
     };
 
+    const ChangeDirectory = async (folderId) =>
+    {
+        const currentFolder = context.currentFolder;
+        if (folderId !== currentFolder.folderId)
+        {
+            const folder = await FindFolderByFolderId(folderId);
+            context.setCurrentFolder(folder)
+            const folders = await FindFoldersByUserIdAndFolderId(folderId);
+            const files = await FindFilesOnFolder(folderId)
+
+            context.setFolderView(folders)
+            context.setFileView(files)
+
+
+
+
+            const newTitle = {
+                shortName: folder.folderName,
+                link: folder.folderPath,
+                folderId: folder.folderId
+            }
+
+            context.setTitle(prev => [...prev, newTitle])
+        }
+    };
     const handleLinkClick = async (link, titleItem) =>
     {
-
-        console.log(titleItem)
-        await handleFolderClick(titleItem.folderId)
-
-        console.log('CF: ', context.currentFolder)
+        await ChangeDirectory(titleItem.folderId)
+        //console.log('CF: ', context.currentFolder)
 
         if (context.title[context.title.length - 1].link === titleItem.link)
             return
@@ -117,7 +140,6 @@ const OptionsNavBar = ({handleFolderClick}) =>
         <div>
             {isClickUploadFolder && <UploadComponentFiles/>}
             <div>
-
                 <Navbar expand="sm" data-bs-theme="dark"
                         style={{
                             marginTop: "10px",
@@ -131,7 +153,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
                         }}>
                     <Container>
                         <Navbar.Brand href="#home" style={{color: "#B2B2B2", fontSize: "12pt", marginTop: "10px"}}>
-                             <nav aria-label="breadcrumb">
+                            <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb d-flex">
                                     <li className="breadcrumb-item"><a
                                         href="/home">{localStorage.getItem('username')}</a>
@@ -143,7 +165,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
                                                 {context.title.map((titleItem, index) => (
                                                     <li className="breadcrumb-item" key={index}>
                                                         <a href="#"
-                                                           onClick={() => handleLinkClick(titleItem.link, titleItem)}>{titleItem.shortName}</a>
+                                                           onClick={async () => await handleLinkClick(titleItem.link, titleItem)}>{titleItem.shortName}</a>
                                                     </li>
                                                 ))}
                                             </>
@@ -208,7 +230,6 @@ const OptionsNavBar = ({handleFolderClick}) =>
                     </Container>
 
                 </Navbar>
-
             </div>
             {isCreateFolder && <PopupRename onClose={async () => await ClosePopupHandler()} isNewFolder={true}/>}
         </div>

@@ -5,23 +5,28 @@ import {DownloadFolder} from "../service/DownloadService";
 import {RemoveFolderWithFolderId} from "../service/RemoveService";
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
+import ToastMessage from "./ToastMessage";
 
 const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
 {
+    const [success, setSuccess] = useState()
     const context = useContext(Context)
     const HandleDownloadFolder = async (folder) =>
     {
-        try
-        {
-            await DownloadFolder(folder)
-            context.setDownloadFolderStatus(Status.Success)
-            context.setShowAlert(true)
-        }
-        catch (error)
-        {
-            context.setDownloadFolderStatus(Status.Fail)
-            context.setShowAlert(true)
-        }
+        context.setIsUpload(false)
+        await DownloadFolder(folder, progress => context.setDownloadProgress(progress))
+            .then(async result => {
+                context.setDownloadFolderStatus(Status.Success)
+                context.setShowAlert(true)
+                setSuccess(true)
+            })
+            .catch(error => {
+
+                context.setDownloadFolderStatus(Status.Fail)
+                context.setShowAlert(true)
+                setSuccess(false)
+            })
+            .finally(() => context.setDownloadProgress(0))
     };
     const HandleRemoveFolder = async (folder) =>
     {
@@ -40,6 +45,7 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                         {folder.folderName}
                     </label>
                 </a>
+
             </td>
 
 
@@ -47,6 +53,7 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                 <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
                     {folder.creationDate}
                 </label>
+
             </td>
 
 
@@ -84,6 +91,7 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                     </div>
                 </label>
             </td>
+            {success && <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
         </tr>
     );
 };

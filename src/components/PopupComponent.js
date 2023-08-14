@@ -26,7 +26,7 @@ const PopupComponent = ({viewFile, onClose}) =>
             setIsText(true)
         else if ([".jpg", ".png", ".svg"].includes(file_type))
             setIsImage(true)
-        else if ([".mp4"].includes(file_type))
+        else if ([".mp4", ".m4v"].includes(file_type))
             setIsVideo(true)
         else if ([".mp3"].includes(file_type))
             setIsMusic(true)

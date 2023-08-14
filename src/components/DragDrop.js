@@ -1,8 +1,9 @@
 import React, {useContext, useEffect, useState} from "react";
-import {UploadFiles} from "../service/UploadService";
+import {UploadFilesCallback} from "../service/UploadService";
 import {Context} from "../Context/ContextProvider";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 import {Status} from "../Status";
+import ToastMessage from "./ToastMessage";
 
 const DragDrop = () =>
 {
@@ -10,6 +11,7 @@ const DragDrop = () =>
     const [dragging, setDragging] = useState(false);
     const context = useContext(Context)
     const [rootFolder, setRootFolder] = useState()
+    const [success, setSuccess] = useState()
 
     useEffect(() =>
     {
@@ -62,44 +64,57 @@ const DragDrop = () =>
     };
     const handleDrop = async (e) =>
     {
-        try
+        context.setIsUpload(true)
+        e.preventDefault();
+        e.stopPropagation();
+        setDragging(false);
+
+        const files = [...e.dataTransfer.files];
+
+        let folderId = await rootFolder.folder_id;
+
+        if (context.currentFolder)
+            folderId = context.currentFolder.folderId
+
+        await UploadFilesCallback(folderId, files, (progress) =>
         {
-            e.preventDefault();
-            e.stopPropagation();
-            setDragging(false);
+            context.setUploadProgress(progress)
+        })
+            .then(async result =>
+            {
+                await loadData(result)
+                context.setUploadFileStatus(Status.Success)
+                context.setShowAlert(true)
+                setSuccess(true)
 
-            const files = [...e.dataTransfer.files];
+            })
+            .catch(error =>
+            {
+                context.setUploadFileStatus(Status.Fail)
+                context.setShowAlert(true)
+                setSuccess(false)
+            })
+            .finally(
+                context.setUploadProgress(0)
+            )
 
-            let folderId = await rootFolder.folder_id;
-
-            if (context.currentFolder)
-                folderId = context.currentFolder.folderId
-
-            const response = await UploadFiles(folderId, files)
-            context.setUploadFileStatus(Status.Success)
-            context.setShowAlert(true)
-            await loadData(response)
-        }
-        catch (error)
-        {
-            context.setUploadFileStatus(Status.Fail)
-            context.setShowAlert(true)
-        }
     };
 
     return (
-        <div
-            className="drag-drop-container"
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            style={{
-                marginTop: "4%"
-            }}
-        >
-            <p style={{color: "#a0a0a0"}}>Please Drag And Drop Files</p>
-            <style>{`
+        <div>
+
+            <div
+                className="drag-drop-container"
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                style={{
+                    marginTop: "4%"
+                }}>
+
+                <p style={{color: "#a0a0a0"}}>Please Drag And Drop Files</p>
+                <style>{`
               .drag-drop-container {
                 border: 2px dashed #a0a0a0;
                 border-radius: 5px;
@@ -109,6 +124,9 @@ const DragDrop = () =>
                 transition: opacity 0.1s;
               }
             `}</style>
+            </div>
+
+            {success && <ToastMessage message="Files uploaded successfully!" title="Success" rightSideMessage="now"/>}
         </div>
     );
 }
