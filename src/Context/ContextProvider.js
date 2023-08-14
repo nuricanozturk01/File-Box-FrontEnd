@@ -15,6 +15,7 @@ const ContextProvider = (props) => {
     const [uploadFileStatus, setUploadFileStatus] = useState(Status.None)
     const [loginStatus, setLoginStatus] = useState(Status.None)
     const [showAlert, setShowAlert] = useState(false)
+    const [availableExtensions, setAvailableExtensions] = useState()
 
     return (
         <Context.Provider value={{
@@ -27,7 +28,8 @@ const ContextProvider = (props) => {
             downloadFileStatus, setDownloadFileStatus,
             uploadFileStatus, setUploadFileStatus,
             showAlert, setShowAlert,
-            loginStatus, setLoginStatus
+            loginStatus, setLoginStatus,
+            availableExtensions, setAvailableExtensions
         }}>
             {props.children}
         </Context.Provider>

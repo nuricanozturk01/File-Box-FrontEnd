@@ -27,10 +27,11 @@ const RenameFolder = ({folder}) =>
             context.folderView
                         .filter(fw => fw.folderId === folder.folderId)
                         .map(fw => {
-                            fw.creationDate = response.folder.creationDate;
+                            fw.creationDate = newFolderName;
                             fw.folderPath = response.folder.folderPath;
                             fw.folderId = response.folder.folderId;
-                            fw.folderName = response.folder.folderName
+                            fw.folderName = response.folder.folderName;
+                            //fw.folder_files = []
                         })
         }
         catch (error)

@@ -35,6 +35,7 @@ const TableComponent = ({navigateId}) =>
             const files = await FindFilesOnFolder(rootFolder.folder_id)
             context.setFolderView(folders)
             context.setFileView(files)
+            //context.setAvailableExtensions(context.fileView.map(fw => fw.file_type))
             context.setRootFolder(rootFolder)
         }
 
@@ -43,17 +44,14 @@ const TableComponent = ({navigateId}) =>
 
     const HandleFolderClick = async (folder) =>
     {
-
-
-
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
-        console.log('NID: ', navigateId)
+
         context.setFolderView(folders)
         context.setFileView(files)
-        console.log("ON T: ", folder)
+
         await context.setCurrentFolder(folder)
-        console.log('C: ', context.currentFolder)
+
         const newTitle = {
             shortName: folder.folderName,
             link: folder.folderPath,

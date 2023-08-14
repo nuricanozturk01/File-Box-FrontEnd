@@ -16,6 +16,7 @@ import music_image from "../images/music-svgrepo-com.svg";
 import text_image from "../images/clipboard-list-svgrepo-com.svg";
 import zip_image from "../images/zip-svgrepo-com.svg";
 import powerpoint_image from "../images/powerpoint2-svgrepo-com.svg";
+import excel_image from "../images/excel2-svgrepo-com.svg";
 import {RemoveFileWithFileId} from "../service/RemoveService";
 import {DownloadFile} from "../service/DownloadService";
 import {Context} from "../Context/ContextProvider";
@@ -108,6 +109,10 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
         else if (['.ppt', '.pptx'].includes(file.file_type))
         {
             return powerpoint_image;
+        }
+        else if (['.xls', '.xlsx'].includes(file.file_type))
+        {
+            return excel_image;
         }
         return file_image;
     };

@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -20,22 +20,23 @@ const OptionsNavBar = ({handleFolderClick}) =>
     const context = useContext(Context)
     const [isCreateFolder, setIsCreateFolder] = useState(false)
     const [isClickUploadFolder, setIsClickUploadFolder] = useState(false)
-
+    //const [availableExtensions, setAvailableExtensions] = useState()
     const [selectedExtension, setSelectedExtension] = useState(null);
-
     const availableExtensions = ['.jpg', '.png', '.pdf', '.docx'];
 
     const handleExtensionSelect = (extension) =>
     {
         setSelectedExtension(extension === selectedExtension ? null : extension);
     };
-
+    /*useEffect(() => {
+        if (context.fileView)
+            setAvailableExtensions(context.fileView.map(fw => fw.file_type))
+    },[context.fileView])*/
     const handleFilter = async () =>
     {
         if (selectedExtension)
         {
             let folderId = context.rootFolder.folder_id
-            console.log(context.currentFolder)
             if (context.currentFolder)
                 folderId = context.currentFolder.folderId
             const data = await FilterFilesByFileExtension(folderId, selectedExtension)

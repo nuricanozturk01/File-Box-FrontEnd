@@ -7,7 +7,7 @@ import PasswordChangeScreen from "./components/PasswordChangeScreen";
 import ContextProvider from "./Context/ContextProvider";
 import React from "react";
 import MessageComponent from "./components/MessageComponent";
-
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 const router = createBrowserRouter([
     {path: '/', element: <LoginComponent/>},
