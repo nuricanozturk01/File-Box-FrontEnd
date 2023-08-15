@@ -22,7 +22,7 @@ export const DownloadFile = async (file, callback) =>
             const link = document.createElement('a');
             link.href = url;
 
-            link.setAttribute('download', `${file.file_name}.${file.file_type}`);
+            link.setAttribute('download', `${file.file_name}`);
 
             document.body.appendChild(link);
             link.click();

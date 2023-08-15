@@ -18,8 +18,15 @@ const ContextProvider = (props) => {
     const [uploadProgress, setUploadProgress] = useState(0)
     const [downloadProgress, setDownloadProgress] = useState(0)
     const [isUpload, setIsUpload] = useState(false)
+
+    const [xPosition, setXPosition] = useState(0)
+    const [yPosition, setYPosition] = useState(0)
+    const [showRightClickMenu, setRightClickShowMenu] = useState(false)
     return (
         <Context.Provider value={{
+            showRightClickMenu, setRightClickShowMenu,
+            yPosition, setYPosition,
+            xPosition, setXPosition,
             title, setTitle,
             currentFolder, setCurrentFolder,
             rootFolder, setRootFolder,

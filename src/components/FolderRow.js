@@ -6,21 +6,25 @@ import {RemoveFolderWithFolderId} from "../service/RemoveService";
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
+import RightClickComponent from "./RightClickComponent";
 
 const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
 {
     const [success, setSuccess] = useState()
+    const [showContextMenu, setShowContextMenu] = useState(false);
     const context = useContext(Context)
     const HandleDownloadFolder = async (folder) =>
     {
         context.setIsUpload(false)
         await DownloadFolder(folder, progress => context.setDownloadProgress(progress))
-            .then(async result => {
+            .then(async result =>
+            {
                 context.setDownloadFolderStatus(Status.Success)
                 context.setShowAlert(true)
                 setSuccess(true)
             })
-            .catch(error => {
+            .catch(error =>
+            {
 
                 context.setDownloadFolderStatus(Status.Fail)
                 context.setShowAlert(true)
@@ -35,10 +39,29 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
             prevFolderView.filter((f) => f.folderId !== folder.folderId)
         );
     };
+    const handleContextMenu = (e) =>
+    {
+        e.preventDefault();
+
+        setShowContextMenu(true);
+        context.setXPosition(e.pageX);
+        context.setYPosition(e.pageY);
+        document.addEventListener('click', handleClickOutside);
+    };
+    const handleClickOutside = () =>
+    {
+        setShowContextMenu(false);
+        document.removeEventListener('click', handleClickOutside);
+    };
+    const handleOnClick = (e) =>
+    {
+        setShowContextMenu(false);
+    };
 
     return (
         <tr>
-            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}>
+            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
+                onClick={handleOnClick}>
                 <a onClick={() => handleFolderClick(folder)}>
                     <img src={folder_image} alt="folder" height="40" width="40"/>
                     <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
@@ -64,34 +87,24 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
             </td>
 
 
-            <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                <label style={{color: "#b2b2b2", textAlign: "center"}}>
-                    <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-                        <Dropdown data-bs-theme="dark">
-                            <Dropdown.Toggle className="custom-dropdown-toggle" variant="secondary" style={{
-                                width: "100px",
-                                height: "30px",
-                                backgroundColor: "#272727",
-                                borderColor: "#272727"
-                            }}>
-                                . . .
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item style={{backgroundColor: "#272727"}}
-                                               onClick={() => HandleDownloadFolder(folder)}
-                                               href="#">Download</Dropdown.Item>
-                                <Dropdown.Item style={{backgroundColor: "#272727"}}
-                                               onClick={() => handleRenameFolder(folder)}
-                                               href="#">Rename</Dropdown.Item>
-                                <Dropdown.Item style={{backgroundColor: "#272727"}}
-                                               onClick={() => HandleRemoveFolder(folder)}
-                                               href="#">Delete</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-                </label>
-            </td>
-            {success && <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
+            {showContextMenu && (
+                <div style={{
+                    position: 'absolute',
+                    zIndex: '100',
+                    top: context.yPosition,
+                    left: context.xPosition,
+                    backgroundColor: "#272727"
+                }}>
+                    <RightClickComponent
+                        download={() => HandleDownloadFolder(folder)}
+                        rename={() => handleRenameFolder(folder)}
+                        remove={() => HandleRemoveFolder(folder)}
+                    />
+                </div>
+
+            )}
+            {success &&
+                <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
         </tr>
     );
 };

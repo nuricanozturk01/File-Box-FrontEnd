@@ -1,5 +1,4 @@
 import React, {useContext, useState} from 'react';
-import {Dropdown} from "react-bootstrap";
 import pdf_file from "../images/filetype-pdf.svg"
 import js_file from "../images/javascript-svgrepo-com.svg"
 import word_file from "../images/word2-svgrepo-com.svg"
@@ -22,21 +21,25 @@ import {DownloadFile} from "../service/DownloadService";
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
+import RightClickComponent from "./RightClickComponent";
 
 const FileRow = ({file, handleFile, handleRenameFile}) =>
 {
     const [success, setSuccess] = useState()
     const context = useContext(Context)
+    const [showContextMenu, setShowContextMenu] = useState(false);
     const HandleDownloadFile = async (file) =>
     {
         context.setIsUpload(false)
         await DownloadFile(file, progress => context.setDownloadProgress(progress))
-            .then(async result => {
+            .then(async result =>
+            {
                 context.setDownloadFileStatus(Status.Success)
                 context.setShowAlert(true)
                 setSuccess(true)
             })
-            .catch(error => {
+            .catch(error =>
+            {
 
                 context.setDownloadFileStatus(Status.Fail)
                 context.setShowAlert(true)
@@ -118,11 +121,34 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
         return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`
     };
+
+
+    const handleContextMenu = (e) =>
+    {
+        e.preventDefault();
+
+        setShowContextMenu(true);
+        context.setXPosition(e.pageX);
+        context.setYPosition(e.pageY);
+        document.addEventListener('click', handleClickOutside);
+    };
+    const handleClickOutside = () =>
+    {
+        setShowContextMenu(false);
+        document.removeEventListener('click', handleClickOutside);
+    };
+    const handleOnClick = (e) =>
+    {
+        setShowContextMenu(false);
+    };
+
+
     return (
         <tr>
 
 
-            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}>
+            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
+                onClick={handleOnClick}>
                 <a onClick={() => handleFile(file)} style={{display: "flex", alignItems: "center"}}>
 
                     <img src={determineFileImage()} style={{marginRight: "5px"}} alt="file" height="50" width="50"/>
@@ -139,6 +165,9 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
             </td>
 
+
+
+
             <td style={{
                 verticalAlign: "middle",
                 textAlign: "center",
@@ -151,13 +180,9 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
             </td>
 
-            {/*  <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                <label style={{color: "#b2b2b2", marginLeft: "20px"}}>
-                    <div className="form-check">
-                        <input className="form-check-input" type="checkbox" value=""/>
-                    </div>
-                </label>
-            </td>*/}
+
+
+
 
             <td style={{
                 verticalAlign: "middle",
@@ -169,38 +194,22 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
                     {
                         calculateFileSize(file.file_byte)
                     }
-
                 </label>
 
             </td>
 
-            <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
+            {success &&
+                <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
 
-                <label style={{color: "#b2b2b2", textAlign: "center"}}>
-                    <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
-                        <Dropdown data-bs-theme="dark">
-                            <Dropdown.Toggle variant="secondary" className="custom-dropdown-toggle" style={{
-                                width: "100px",
-                                height: "30px",
-                                backgroundColor: "#272727",
-                                borderColor: "#272727",
-                            }}>
-                                . . .
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                <Dropdown.Item style={{backgroundColor: "#272727"}}
-                                               onClick={() => HandleDownloadFile(file)}
-                                               href="#">Download</Dropdown.Item>
-                                <Dropdown.Item style={{backgroundColor: "#272727"}}
-                                               onClick={() => handleRenameFile(file)} href="#">Rename</Dropdown.Item>
-                                <Dropdown.Item style={{backgroundColor: "#272727"}}
-                                               onClick={() => HandleRemoveFile(file)} href="#">Delete</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                    </div>
-                </label>
-            </td>
-            {success && <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
+            {showContextMenu && (
+                <div style={{position: 'absolute', zIndex: '100', top: context.yPosition, left: context.xPosition, backgroundColor: "#272727"}}>
+                    <RightClickComponent
+                        download={() => HandleDownloadFile(file)}
+                        rename={() => handleRenameFile(file)}
+                        remove={() => HandleRemoveFile(file)}
+                    />
+                </div>
+            )}
         </tr>
 
 

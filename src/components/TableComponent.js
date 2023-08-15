@@ -11,6 +11,7 @@ import {
     FindRootFolderByUserId
 } from "../service/FindFoldersByUserIdAndFolderId";
 
+
 const TableComponent = ({navigateId}) =>
 {
     // Listing components
@@ -111,7 +112,6 @@ const TableComponent = ({navigateId}) =>
         setViewFile(null)
     };
 
-
     return (
         <div>
 
@@ -119,16 +119,13 @@ const TableComponent = ({navigateId}) =>
 
                 {!click && (
 
-                    <Table className="table-dark table-hover table-bordered" style={{backgroundColor: "#272727"}}>
+                    <Table className="table-dark table-hover table-bordered" style={{backgroundColor: "#272727"}} >
                         <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
 
                         <tr>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Folder</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
-                            {/*<th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Select</th>*/}
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File Size</th>
-
-                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}></th>
                         </tr>
 
                         </thead>
