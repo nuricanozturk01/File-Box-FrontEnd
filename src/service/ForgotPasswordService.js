@@ -11,6 +11,7 @@ const ValidatePassword = async (email) =>
         const CHANGE_PASSWORD_REQUEST_URL = `${PREFIX}/change/password?email=${email}`;
         const response = await axios.post(CHANGE_PASSWORD_REQUEST_URL);
         const responseData = response.data.data
+
         return {
             username: responseData.username,
             user_email: responseData.user_email,

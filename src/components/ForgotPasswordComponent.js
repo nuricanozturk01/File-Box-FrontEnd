@@ -14,7 +14,6 @@ const ForgotPasswordComponent = () =>
 
     const HandleSubmitButton = async () =>
     {
-
         const response = await ValidatePassword(email);
         console.log(response)
     };
@@ -48,7 +47,6 @@ const ForgotPasswordComponent = () =>
                     </form>
                 </div>
             </div>
-
         </div>
     );
 
