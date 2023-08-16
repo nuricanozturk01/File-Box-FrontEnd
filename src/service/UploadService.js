@@ -37,10 +37,14 @@ export const UploadFilesCallback = async (folderId, selectedFiles, callback) =>
 
     for (let i = 0; i < selectedFiles.length; i++)
         formData.append('formFile', selectedFiles[i]);
-
+//console.log(progress)
     return axios.post(URL, formData, {
         headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`},
-        onUploadProgress: (progressEvent) => callback(Math.round((progressEvent.loaded / progressEvent.total) * 100))})
+        onUploadProgress: (progressEvent) => {
+            console.log(progressEvent)
+            callback(Math.round((progressEvent.loaded / progressEvent.total) * 100))
+        }
+    })
         .then(response => response.data.data)
         .catch(error =>
         {

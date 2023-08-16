@@ -4,8 +4,8 @@ import LoginComponent from "./components/LoginComponent";
 import ForgotPasswordComponent from "./components/ForgotPasswordComponent";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import PasswordChangeScreen from "./components/PasswordChangeScreen";
-import ContextProvider, {Context} from "./Context/ContextProvider";
-import React, {useContext} from "react";
+import ContextProvider from "./Context/ContextProvider";
+import React from "react";
 import MessageComponent from "./components/MessageComponent";
 
 
@@ -19,9 +19,6 @@ const router = createBrowserRouter([
 
 
 function App() {
-
-
-
     return (
         <ContextProvider>
             <div className="page-item" style={{backgroundColor: "#1C1C1C", height: "100vh"}} >

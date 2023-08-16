@@ -1,6 +1,5 @@
 import React, {useContext, useState} from 'react';
 import folder_image from "../images/folder.png";
-import {Dropdown} from "react-bootstrap";
 import {DownloadFolder} from "../service/DownloadService";
 import {RemoveFolderWithFolderId} from "../service/RemoveService";
 import {Context} from "../Context/ContextProvider";

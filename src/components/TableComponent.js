@@ -123,7 +123,7 @@ const TableComponent = ({navigateId}) =>
                         <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
 
                         <tr>
-                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Folder</th>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File And Folder</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File Size</th>
                         </tr>

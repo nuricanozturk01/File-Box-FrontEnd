@@ -1,61 +1,33 @@
-import React, {useState} from "react";
-
+import React from "react";
+import download_image from '../images/download-svgrepo-com.svg'
+import rename_image from '../images/rename-svgrepo-com.svg'
+import delete_image from '../images/delete-svgrepo-com.svg'
+import {MenuItem} from "@react-pdf-viewer/core";
 
 const RightClickComponent = ({download, rename, remove}) =>
 {
-    const [hovered, setHovered] = useState(false);
-
-    const handleMouseEnter = () =>
-    {
-        setHovered(true);
-    };
-
-    const handleMouseLeave = () =>
-    {
-        setHovered(false);
-    };
-    const buttonStyle = {
-        borderColor: "#272727",
-        backgroundColor: hovered ? '#353535' : '#272727',
-        color: '#b2b2b2',
-        width: "90px",
-        textAlign: "center",
-        transition: 'background-color 0.3s ease',
-    };
     return (
-        <div>
-            <div style={{backgroundColor: "#272727"}}>
-                <button onClick={download}
+        <div style={{backgroundColor: "#272727"}}>
+            <MenuItem onClick={download}>
+                <img src={download_image} alt="download" width="20px" height="25px" style={{marginRight: "3px"}}/>
+                <label style={{color: "#b2b2b2"}}>
+                    Download
+                </label>
+            </MenuItem>
 
-                        className="btn btn-primary w-10 py-2"
-                        style={buttonStyle}
-                        onMouseOver={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        type="submit"> Download
-                </button>
+            <MenuItem onClick={rename}>
+                <img src={rename_image} alt="rename" width="20px" height="25px" style={{marginRight: "3px"}}/>
+                <label style={{color: "#b2b2b2"}}>
+                    Rename
+                </label>
+            </MenuItem>
 
-                <br/>
-
-                <button onClick={rename}
-                        className="btn btn-primary w-10 py-2"
-                        style={buttonStyle}
-                        onMouseOver={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        type="submit"> Rename
-                </button>
-
-                <br/>
-
-                <button
-
-                    onClick={remove}
-                    className="btn btn-primary w-10 py-2"
-                    style={buttonStyle}
-                    onMouseOver={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                    type="submit"> Delete
-                </button>
-            </div>
+            <MenuItem onClick={remove}>
+                <img src={delete_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
+                <label style={{color: "#b2b2b2"}}>
+                    Remove
+                </label>
+            </MenuItem>
         </div>
     );
 }

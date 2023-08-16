@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -17,6 +17,7 @@ import {
     FindFoldersByUserIdAndFolderId
 } from "../service/FindFoldersByUserIdAndFolderId";
 
+import folder_image from '../images/folder-minus-svgrepo-com.svg'
 
 const OptionsNavBar = ({handleFolderClick}) =>
 {
@@ -26,8 +27,16 @@ const OptionsNavBar = ({handleFolderClick}) =>
     const [isClickUploadFolder, setIsClickUploadFolder] = useState(false)
 
     const [selectedExtension, setSelectedExtension] = useState(null);
-    const availableExtensions = ['.jpg', '.png', '.pdf', '.docx'];
 
+    //const [tmpFiles, setTmpFiles] = useState()
+    const [extensions, setExtensions] = useState(['.jpg', '.png', '.pdf', '.docx'])
+
+    useEffect(() => {
+        const extensions = context.fileView.map(fw => fw.file_type).filter((value, index, self) => self.indexOf(value) === index)
+        setExtensions(extensions)
+       // setExtensions(prev => [...prev, 'normal'])
+
+    }, [context.fileView])
     const handleExtensionSelect = (extension) =>
     {
         setSelectedExtension(extension === selectedExtension ? null : extension);
@@ -37,10 +46,15 @@ const OptionsNavBar = ({handleFolderClick}) =>
     {
         if (selectedExtension)
         {
+            /*if (selectedExtension === 'normal' && tmpFiles)
+                context.setFileView(tmpFiles)*/
+
             let folderId = context.rootFolder.folder_id
             if (context.currentFolder)
                 folderId = context.currentFolder.folderId
+            
             const data = await FilterFilesByFileExtension(folderId, selectedExtension)
+            
             context.setFileView(data.files)
         }
     };
@@ -58,9 +72,6 @@ const OptionsNavBar = ({handleFolderClick}) =>
             context.setFolderView(folders)
             context.setFileView(files)
 
-
-
-
             const newTitle = {
                 shortName: folder.folderName,
                 link: folder.folderPath,
@@ -73,7 +84,6 @@ const OptionsNavBar = ({handleFolderClick}) =>
     const handleLinkClick = async (link, titleItem) =>
     {
         await ChangeDirectory(titleItem.folderId)
-        //console.log('CF: ', context.currentFolder)
 
         if (context.title[context.title.length - 1].link === titleItem.link)
             return
@@ -136,6 +146,10 @@ const OptionsNavBar = ({handleFolderClick}) =>
 
         context.setFileView(data.files)
     };
+    const HandleHomeButton = () =>
+    {
+        window.location.href = "/home";
+    };
     return (
         <div>
             {isClickUploadFolder && <UploadComponentFiles/>}
@@ -152,20 +166,29 @@ const OptionsNavBar = ({handleFolderClick}) =>
                             alignItems: "center", // İçeriği dikeyde tam ortada hizalayın
                         }}>
                     <Container>
-                        <Navbar.Brand href="#home" style={{color: "#B2B2B2", fontSize: "12pt", marginTop: "10px"}}>
+                        <Navbar.Brand href="#home" style={{color: "#D2D2D2", fontSize: "12pt", marginTop: "20px"}}>
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb d-flex">
-                                    <li className="breadcrumb-item"><a
-                                        href="/home">{localStorage.getItem('username')}</a>
-                                    </li>
+
 
                                     <Context.Consumer>
                                         {context => (
                                             <>
+                                                <div className="breadcrumb-item">
+                                                    <img src={folder_image} alt="home" width="25px" height="26px"
+                                                         style={{marginBottom: "6px"}}/>
+                                                    <span onClick={HandleHomeButton}
+                                                          style={{marginLeft: "4px"}}>Home</span>
+                                                </div>
                                                 {context.title.map((titleItem, index) => (
                                                     <li className="breadcrumb-item" key={index}>
-                                                        <a href="#"
-                                                           onClick={async () => await handleLinkClick(titleItem.link, titleItem)}>{titleItem.shortName}</a>
+                                                        <img src={folder_image} alt="home" width="25px"
+                                                             height="29px"
+                                                             style={{marginBottom: "6px"}}/>
+                                                        <span
+                                                            onClick={async () => await handleLinkClick(titleItem.link, titleItem)}>
+                                                            {titleItem.shortName}
+                                                        </span>
                                                     </li>
                                                 ))}
                                             </>
@@ -174,8 +197,9 @@ const OptionsNavBar = ({handleFolderClick}) =>
 
                                 </ol>
                             </nav>
-                        </Navbar.Brand>
 
+
+                        </Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
 
                         <Navbar.Collapse id="basic-navbar-nav">
@@ -206,7 +230,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
                                 </NavDropdown>
                                 <Nav.Link disabled={true}>|</Nav.Link>
                                 <NavDropdown title="Filter By">
-                                    {availableExtensions.map(extension => (
+                                    {extensions.map(extension => (
                                         <NavDropdown.Item
                                             key={extension}
                                             style={{

@@ -1,11 +1,13 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import filebox from "../images/filebox_logo.png";
 import ValidatePassword from "../service/ForgotPasswordService";
+import {Status} from "../Status";
+import {Context} from "../Context/ContextProvider";
 
 const ForgotPasswordComponent = () =>
 {
     const [email, setEmail] = useState(null);
-
+    const context = useContext(Context)
 
     const HandleEmail = (event) =>
     {
@@ -15,11 +17,15 @@ const ForgotPasswordComponent = () =>
     const HandleSubmitButton = async () =>
     {
         const response = await ValidatePassword(email);
-        console.log(response)
+
+        context.setSuccessSentEmail(response.success ? Status.Success : Status.Fail)
+        context.setShowAlert(true)
     };
 
     return (
         <div className="container">
+
+
             <div className="row d-flex align-items-center justify-content-center" style={{height: "100vh"}}>
                 <div className="col-md-6">
                     <form style={{margin: "10px"}} onClick={event => event.preventDefault()}>

@@ -1,9 +1,10 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import Navbar from "./Navbar";
 import OptionsNavBar from "./OptionsNavBar";
 import TableComponent from "./TableComponent";
 import DragDrop from "./DragDrop";
 import ProgressBarComponent from "./ProgressBarComponent";
+
 
 
 const MainPage = () =>

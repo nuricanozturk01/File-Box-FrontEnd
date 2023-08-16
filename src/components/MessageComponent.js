@@ -17,13 +17,21 @@ const MessageComponent = () =>
             }, 2000);
             return () => clearTimeout(timer);
         }
-    }, [context.showAlert]);
+    }, [context, context.showAlert]);
 
 
     return (
-        <div>
+        <div className="container col-md-3">
             {context.loginStatus !== Status.None && context.loginStatus === Status.Fail &&
-                <div className="alert alert-danger" role="alert">Please controle the username and password</div>}
+                <div className="row alert alert-danger justify-content-center"
+                     role="alert"
+                     style={{width: "350px"}}>Please control the username and password</div>}
+
+            {context.successSentEmail !== Status.None && context.successSentEmail === Status.Success &&
+                <div className="row alert alert-info justify-content-center" role="alert">Please check the email box!</div>}
+
+            {context.successSentEmail !== Status.None && context.successSentEmail === Status.Fail &&
+                <div className="row alert alert-danger justify-content-center" role="alert">User Not Found!</div>}
 
         </div>
     );

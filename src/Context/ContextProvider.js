@@ -18,13 +18,14 @@ const ContextProvider = (props) => {
     const [uploadProgress, setUploadProgress] = useState(0)
     const [downloadProgress, setDownloadProgress] = useState(0)
     const [isUpload, setIsUpload] = useState(false)
+    const [successSentEmail, setSuccessSentEmail] = useState(Status.None)
 
     const [xPosition, setXPosition] = useState(0)
     const [yPosition, setYPosition] = useState(0)
-    const [showRightClickMenu, setRightClickShowMenu] = useState(false)
+    const [illegalChar, setIllegalChar] = useState(Status.None)
     return (
         <Context.Provider value={{
-            showRightClickMenu, setRightClickShowMenu,
+            successSentEmail, setSuccessSentEmail,
             yPosition, setYPosition,
             xPosition, setXPosition,
             title, setTitle,
@@ -39,7 +40,8 @@ const ContextProvider = (props) => {
             loginStatus, setLoginStatus,
             uploadProgress, setUploadProgress,
             downloadProgress, setDownloadProgress,
-            isUpload, setIsUpload
+            isUpload, setIsUpload,
+            illegalChar, setIllegalChar
         }}>
             {props.children}
         </Context.Provider>

@@ -14,7 +14,7 @@ const ToastMessage = ({message, title, rightSideMessage}) =>
             const timer = setTimeout(() =>
             {
                 context.setShowAlert(false);
-            }, 10000);
+            }, 3000);
             return () => clearTimeout(timer);
         }
     }, [context.showAlert]);

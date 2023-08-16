@@ -144,7 +144,7 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
 
     return (
-        <tr>
+        <tr style={{backgroundColor: "#272727"}}>
 
 
             <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}

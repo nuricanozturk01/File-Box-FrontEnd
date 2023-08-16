@@ -18,7 +18,7 @@ const TextViewer = ({filePath}) =>
             })
             .catch(error =>
             {
-                console.error("Hata:", error);
+                console.error("Error:", error);
             });
         console.log(code)
     }, [filePath]);

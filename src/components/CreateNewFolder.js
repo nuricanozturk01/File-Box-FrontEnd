@@ -2,12 +2,14 @@ import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../Context/ContextProvider";
 import {CreateFolder} from "../service/UploadService";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
+import {Status} from "../Status";
 
 const CreateNewFolder = () =>
 {
     const context = useContext(Context)
     const [rootFolder, setRootFolder] = useState()
     const [newFolderName, setNewFolderName] = useState()
+    const blacklist = ['/', '\\', '>', '<', ':', '"', '|', '?', '*']
     useEffect(() =>
     {
         const findRoot = async () =>
@@ -20,33 +22,49 @@ const CreateNewFolder = () =>
     }, [])
     const HandleNewFolderName = (event) =>
     {
-        setNewFolderName(event.target.value)
+        const newInput = event.target.value
+        if (blacklist.some(w => newInput.includes(w)))
+        {
+            context.setIllegalChar(Status.Success)
+            context.setShowAlert(true)
+        } else
+        {
+            setNewFolderName(newInput)
+            context.setIllegalChar(Status.Fail)
+            context.setShowAlert(false)
+        }
     };
     const HandleSubmitButton = async () =>
     {
-        let folderId = await rootFolder;
+        if (context.illegalChar === Status.Fail || context.illegalChar === Status.None)
+        {
+            let folderId = await rootFolder;
 
-        if (context.currentFolder && context.currentFolder.folderId)
-            folderId = context.currentFolder.folderId
+            if (context.currentFolder && context.currentFolder.folderId)
+                folderId = context.currentFolder.folderId
 
-        const response = await CreateFolder(folderId, newFolderName)
+            const response = await CreateFolder(folderId, newFolderName)
 
-        console.log(response)
+            const dto = {
+                creationDate: new Date().toLocaleDateString(),
+                folderId: response.folderId,
+                folderName: response.folder_name,
+                folderPath: response.folder_path,
+                folder_files: []
+            }
 
-        const dto = {
-            creationDate: new Date().toLocaleDateString(),
-            folderId: response.folderId,
-            folderName: response.folder_name,
-            folderPath: response.folder_path,
-            folder_files: []
+            context.setFolderView(prev => [...prev, dto])
         }
-        console.log(dto)
-        context.setFolderView(prev => [...prev, dto])
     };
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
             <div className="form-floating mb-4" style={{position: "relative"}}>
-
+                {context.illegalChar !== Status.None && context.illegalChar === Status.Success &&
+                    <div className="row alert alert-warning justify-content-center" style={{
+                        marginBottom: "45px",
+                    }} role="alert">
+                        You cannot enter the /\*?{'<>'}:"| characters!
+                    </div>}
                 <label
                     htmlFor="floatingInput"
                     style={{
@@ -61,6 +79,7 @@ const CreateNewFolder = () =>
                     }}>
                     Please Enter the Folder Name
                 </label>
+
                 <input
                     type="text"
                     className="form-control"
@@ -76,7 +95,6 @@ const CreateNewFolder = () =>
                 />
 
             </div>
-
             <button
                 onClick={HandleSubmitButton}
                 className="btn btn-primary py-2"

@@ -4,6 +4,7 @@ import {Context} from "../Context/ContextProvider";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
+import upload_image from "../images/upload-svgrepo-com.svg";
 
 const DragDrop = () =>
 {
@@ -113,7 +114,11 @@ const DragDrop = () =>
                     marginTop: "4%"
                 }}>
 
-                <p style={{color: "#a0a0a0"}}>Please Drag And Drop Files</p>
+                <p style={{color: "#a0a0a0", fontSize: "13pt"}}>
+                    <img src={upload_image} alt="account" width="40px" height="39px"/>
+                    <br/>
+                    Please Drag And Drop Files
+                </p>
                 <style>{`
               .drag-drop-container {
                 border: 2px dashed #a0a0a0;

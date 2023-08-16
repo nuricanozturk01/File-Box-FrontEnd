@@ -19,7 +19,6 @@ const RenameFolder = ({folder}) =>
     };
     const HandleSubmitButton = async () =>
     {
-
         try
         {
             const response = await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
