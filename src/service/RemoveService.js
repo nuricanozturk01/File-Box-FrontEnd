@@ -3,7 +3,6 @@ import {PREFIX} from "../components/Connection";
 
 export const RemoveFileWithFileId = async (fileId) =>
 {
-
     try
     {
         const user_id = localStorage.getItem('user_id')
@@ -17,7 +16,6 @@ export const RemoveFileWithFileId = async (fileId) =>
 
     }
 }
-
 
 export const RemoveFolderWithFolderId = async (folderId) =>
 {

@@ -31,9 +31,9 @@ const UploadComponentFiles = () =>
 
     const loadData = (responseData) =>
     {
-        for (let i = 0; i < responseData.files.length; ++i)
+        for (let i = 0; i < responseData.length; ++i)
         {
-            const file = responseData.files[i]
+            const file = responseData[i].files[0]
             const dto = {
                 created_date: file.created_date,
                 file_byte: file.file_byte,
@@ -49,19 +49,20 @@ const UploadComponentFiles = () =>
     const HandleUploadButton = async () =>
     {
         context.setIsUpload(true)
-        context.setUploadProgress(0)
+        //context.setUploadProgress(0)
         let folderId = await rootFolder;
 
         if (context.currentFolder && context.currentFolder.folderId)
             folderId = context.currentFolder.folderId
 
-        await UploadFilesCallback(folderId, selectedFiles, (progress) =>
+
+        await UploadFilesCallback(folderId, selectedFiles, (progressDictionary) =>
         {
-            context.setUploadProgress(progress)
+            context.setUploadProgress(map => new Map(map.set(progressDictionary.fileName, progressDictionary.progress)))
         })
-            .then(async result =>
+            .then(async response =>
             {
-                await loadData(result)
+                await loadData(response)
                 context.setUploadFileStatus(Status.Success)
                 context.setShowAlert(true)
                 setSuccess(true)
@@ -73,7 +74,7 @@ const UploadComponentFiles = () =>
                 setSuccess(false)
             })
             .finally(
-                context.setUploadProgress(0)
+                //context.setUploadProgress(0)
             );
     };
 

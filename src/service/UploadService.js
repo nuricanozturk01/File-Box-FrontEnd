@@ -1,55 +1,53 @@
 import axios from "axios";
 import {PREFIX} from "../components/Connection";
 
-
-export const UploadFiles = async (folderId, selectedFiles) =>
+export const Upload = async (file, folderId, callback) =>
 {
-    try
-    {
-        const userId = localStorage.getItem('user_id')
-        const URL = `${PREFIX}/upload/files?uid=${userId}&fid=${folderId}`;
-        const formData = new FormData();
 
-        for (let i = 0; i < selectedFiles.length; i++)
-            formData.append('formFile', selectedFiles[i]);
-
-        try
-        {
-            const response = await axios.post(URL, formData, {
-                headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`},
-                /*onUploadProgress: progressEvent => setUploadProgress(progressEvent.progress)*/
-            });
-            return response.data.data
-        } catch (error)
-        {
-            console.error('Error uploading files:', error);
-        }
-    } catch (error)
-    {
-        console.error('Error uploading files:', error);
-    }
-}
-export const UploadFilesCallback = async (folderId, selectedFiles, callback) =>
-{
-    const userId = localStorage.getItem('user_id')
+    const token = localStorage.getItem('token');
+    const userId = localStorage.getItem('user_id');
     const URL = `${PREFIX}/upload/files?uid=${userId}&fid=${folderId}`;
     const formData = new FormData();
 
-    for (let i = 0; i < selectedFiles.length; i++)
-        formData.append('formFile', selectedFiles[i]);
-//console.log(progress)
-    return axios.post(URL, formData, {
-        headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`},
-        onUploadProgress: (progressEvent) => {
-            console.log(progressEvent)
-            callback(Math.round((progressEvent.loaded / progressEvent.total) * 100))
-        }
-    })
-        .then(response => response.data.data)
-        .catch(error =>
+    formData.append('formFile', file);
+
+    return new Promise(async (resolve, reject) =>
+    {
+        try
         {
-            throw error
-        });
+            const response = await axios.post(URL, formData, {
+                headers: {Authorization: `Bearer ${token}`},
+
+                onUploadProgress: (progressEvent) =>
+                {
+                    const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+
+                    let returnVal = {
+                        fileName: file.name,
+                        progress: progress
+                    }
+                    callback(returnVal);
+                },
+            });
+
+            resolve(response.data.data);
+
+        } catch (error)
+        {
+            reject(error);
+        }
+    });
+}
+export const UploadFilesCallback = async (folderId, selectedFiles, callback) =>
+{
+    try
+    {
+        console.log("selected files: ", selectedFiles)
+        return await Promise.all(selectedFiles.map((file) => Upload(file, folderId, callback)));
+    } catch (error)
+    {
+        console.log(error);
+    }
 }
 export const CreateFolder = async (folderId, folderName) =>
 {

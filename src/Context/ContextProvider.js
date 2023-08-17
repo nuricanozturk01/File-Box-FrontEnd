@@ -15,7 +15,7 @@ const ContextProvider = (props) => {
     const [uploadFileStatus, setUploadFileStatus] = useState(Status.None)
     const [loginStatus, setLoginStatus] = useState(Status.None)
     const [showAlert, setShowAlert] = useState(false)
-    const [uploadProgress, setUploadProgress] = useState(0)
+    let [uploadProgress, setUploadProgress] = useState(new Map())
     const [downloadProgress, setDownloadProgress] = useState(0)
     const [isUpload, setIsUpload] = useState(false)
     const [successSentEmail, setSuccessSentEmail] = useState(Status.None)
@@ -23,8 +23,14 @@ const ContextProvider = (props) => {
     const [xPosition, setXPosition] = useState(0)
     const [yPosition, setYPosition] = useState(0)
     const [illegalChar, setIllegalChar] = useState(Status.None)
+
+
+    const [uploading, setUploading] = useState(false);
+    const [progress, setProgress] = useState([]);
     return (
         <Context.Provider value={{
+            uploading, setUploading,
+            progress, setProgress,
             successSentEmail, setSuccessSentEmail,
             yPosition, setYPosition,
             xPosition, setXPosition,

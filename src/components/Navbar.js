@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -7,8 +7,19 @@ import Navbar from 'react-bootstrap/Navbar';
 import account_image from '../images/account.svg'
 import app_image from '../images/database-svgrepo-com.svg'
 import home_image from '../images/home.svg'
+import {Offcanvas} from "react-bootstrap";
+import UploadListComponent from "./UploadListComponent";
 const NavBar = () =>
 {
+    const [showUploadList, setShowUploadList] = useState(false)
+    const HandleUploadList = () =>
+    {
+        setShowUploadList(true)
+    };
+    const handleCloseUploadList = () =>
+    {
+        setShowUploadList(false)
+    };
     return (
         <Navbar style={{backgroundColor: "#202020"}}>
             <Container>
@@ -37,9 +48,24 @@ const NavBar = () =>
                             </label>
                         </Navbar.Brand>
                     </Nav>
-                   {/* <Nav className="ms-auto">
-                        <Nav.Link style={{color: "#c5c5c5"}} href="#">Logout</Nav.Link>
-                    </Nav>*/}
+                    <Nav className="ms-auto">
+                        <Navbar.Brand style={{color: "#B2B2B2"}} onClick={HandleUploadList} href="#">
+                            Upload List
+                        </Navbar.Brand>
+
+
+                        <Offcanvas style={{backgroundColor: "#1c1c1c"}} show={showUploadList} placement="end" onHide={handleCloseUploadList}>
+
+                            <Offcanvas.Header closeButton>
+                                <Offcanvas.Title style={{color: "#b2b2b2", justifyContent: "center",textAlign: "center"}}>Upload List</Offcanvas.Title>
+                            </Offcanvas.Header>
+
+                            <Offcanvas.Body>
+                               <UploadListComponent/>
+                            </Offcanvas.Body>
+                        </Offcanvas>
+
+                    </Nav>
                 </Navbar.Collapse>
             </Container>
         </Navbar>

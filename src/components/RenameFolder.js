@@ -1,11 +1,13 @@
 import React, {useContext, useEffect, useState} from "react";
 import {RenameFolderWithFolderId} from "../service/RenameService";
 import {Context} from "../Context/ContextProvider";
+import {Status} from "../Status";
 
 const RenameFolder = ({folder}) =>
 {
     const [newFolderName, setNewFolderName] = useState()
     const [renameFolder, setRenameFolder] = useState(null)
+    const blacklist = ['/', '\\', '>', '<', ':', '"', '|', '?', '*']
     const context = useContext(Context)
     useEffect(() =>
     {
@@ -14,26 +16,39 @@ const RenameFolder = ({folder}) =>
 
     const HandleNewFolderName = (event) =>
     {
-        setNewFolderName(event.target.value)
-
+        const newInput = event.target.value
+        if (blacklist.some(w => newInput.includes(w)))
+        {
+            context.setIllegalChar(Status.Success)
+            context.setShowAlert(true)
+        } else
+        {
+            setNewFolderName(newInput)
+            context.setIllegalChar(Status.Fail)
+            context.setShowAlert(false)
+        }
     };
     const HandleSubmitButton = async () =>
     {
         try
         {
-            const response = await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
+            if (context.illegalChar === Status.Fail || context.illegalChar === Status.None)
+            {
+                const response = await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
 
-            context.folderView
-                        .filter(fw => fw.folderId === folder.folderId)
-                        .map(fw => {
-                            fw.creationDate = response.folder.creationDate;
-                            fw.folderPath = response.folder.folderPath;
-                            fw.folderId = response.folder.folderId;
-                            fw.folderName = newFolderName;
-                            //fw.folder_files = []
-                        })
-        }
-        catch (error)
+                context.folderView
+                    .filter(fw => fw.folderId === folder.folderId)
+                    .map(fw =>
+                    {
+                        fw.creationDate = response.folder.creationDate;
+                        fw.folderPath = response.folder.folderPath;
+                        fw.folderId = response.folder.folderId;
+                        fw.folderName = newFolderName;
+                        fw.folder_files = response.folder.folder_files;
+                    })
+            }
+
+        } catch (error)
         {
 
         }
@@ -41,7 +56,12 @@ const RenameFolder = ({folder}) =>
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
             <div className="form-floating mb-4" style={{position: "relative"}}>
-
+                {context.illegalChar !== Status.None && context.illegalChar === Status.Success &&
+                    <div className="row alert alert-warning justify-content-center" style={{
+                        marginBottom: "45px",
+                    }} role="alert">
+                        You cannot enter the /\*?{'<>'}:"| characters!
+                    </div>}
                 <label
                     htmlFor="floatingInput"
                     style={{

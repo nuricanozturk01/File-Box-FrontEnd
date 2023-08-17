@@ -8,21 +8,18 @@ import upload_image from "../images/upload-svgrepo-com.svg";
 
 const DragDrop = () =>
 {
-
     const [dragging, setDragging] = useState(false);
     const context = useContext(Context)
     const [rootFolder, setRootFolder] = useState()
     const [success, setSuccess] = useState()
-
     useEffect(() =>
     {
-        const fetchData = async () =>
+        const findRoot = async () =>
         {
-            const rootFolder = await FindRootFolderByUserId(localStorage.getItem('user_id'))
-            setRootFolder(rootFolder)
+            const root = await FindRootFolderByUserId();
+            setRootFolder(root.folder_id)
         }
-
-        fetchData()
+        findRoot()
 
     }, [])
 
@@ -48,9 +45,9 @@ const DragDrop = () =>
     };
     const loadData = (responseData) =>
     {
-        for (let i = 0; i < responseData.files.length; ++i)
+        for (let i = 0; i < responseData.length; ++i)
         {
-            const file = responseData.files[i]
+            const file = responseData[i].files[0]
             const dto = {
                 created_date: file.created_date,
                 file_byte: file.file_byte,
@@ -72,22 +69,22 @@ const DragDrop = () =>
 
         const files = [...e.dataTransfer.files];
 
-        let folderId = await rootFolder.folder_id;
+        let folderId = await rootFolder;
 
-        if (context.currentFolder)
+        if (context.currentFolder && context.currentFolder.folderId)
             folderId = context.currentFolder.folderId
 
-        await UploadFilesCallback(folderId, files, (progress) =>
+
+        await UploadFilesCallback(folderId, files, (progressDictionary) =>
         {
-            context.setUploadProgress(progress)
+            context.setUploadProgress(map => new Map(map.set(progressDictionary.fileName, progressDictionary.progress)))
         })
-            .then(async result =>
+            .then(async response =>
             {
-                await loadData(result)
+                await loadData(response)
                 context.setUploadFileStatus(Status.Success)
                 context.setShowAlert(true)
                 setSuccess(true)
-
             })
             .catch(error =>
             {
@@ -96,9 +93,8 @@ const DragDrop = () =>
                 setSuccess(false)
             })
             .finally(
-                context.setUploadProgress(0)
-            )
-
+                //context.setUploadProgress(0)
+            );
     };
 
     return (
