@@ -170,7 +170,6 @@ const OptionsNavBar = ({handleFolderClick}) =>
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb d-flex">
 
-
                                     <Context.Consumer>
                                         {context => (
                                             <>

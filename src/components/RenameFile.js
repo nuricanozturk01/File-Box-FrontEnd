@@ -3,11 +3,13 @@ import {RenameFileWithFileId} from "../service/RenameService";
 import './DropDown.css'
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
+import ToastMessage from "./ToastMessage";
 
 const RenameFile = ({file}) =>
 {
     const [newFileName, setNewFileName] = useState()
     const [renameFile, setRenameFile] = useState(null)
+    const [success, setSuccess] = useState()
     const blacklist = ['/', '\\', '>', '<', ':', '"', '|', '?', '*']
     const context = useContext(Context)
     useEffect(() =>
@@ -34,7 +36,11 @@ const RenameFile = ({file}) =>
         if (context.illegalChar === Status.Fail || context.illegalChar === Status.None)
         {
             const response = await RenameFileWithFileId(renameFile.file_id, newFileName)
-
+            if (response)
+            {
+                context.setShowAlert(true)
+                setSuccess(true)
+            }
             context.fileView
                 .filter(fw => fw.file_id === file.file_id)
                 .map(fw =>
@@ -51,6 +57,9 @@ const RenameFile = ({file}) =>
 
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+
+            {success && <ToastMessage message="File name changed Successfully!" title="Notification" rightSideMessage="now"/>}
+
             <div className="form-floating mb-4" style={{position: "relative"}}>
                 {context.illegalChar !== Status.None && context.illegalChar === Status.Success &&
                     <div className="row alert alert-warning justify-content-center" style={{

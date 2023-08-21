@@ -3,12 +3,14 @@ import {Context} from "../Context/ContextProvider";
 import {CreateFolder} from "../service/UploadService";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 import {Status} from "../Status";
+import ToastMessage from "./ToastMessage";
 
 const CreateNewFolder = () =>
 {
     const context = useContext(Context)
     const [rootFolder, setRootFolder] = useState()
     const [newFolderName, setNewFolderName] = useState()
+    const [success, setSuccess] = useState()
     const blacklist = ['/', '\\', '>', '<', ':', '"', '|', '?', '*']
     useEffect(() =>
     {
@@ -44,7 +46,11 @@ const CreateNewFolder = () =>
                 folderId = context.currentFolder.folderId
 
             const response = await CreateFolder(folderId, newFolderName)
-
+            if (response)
+            {
+                context.setShowAlert(true)
+                setSuccess(true)
+            }
             const dto = {
                 creationDate: new Date().toLocaleDateString(),
                 folderId: response.folderId,
@@ -58,6 +64,7 @@ const CreateNewFolder = () =>
     };
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            {success && <ToastMessage message="Folder created Successfully!" title="Notification" rightSideMessage="now"/>}
             <div className="form-floating mb-4" style={{position: "relative"}}>
                 {context.illegalChar !== Status.None && context.illegalChar === Status.Success &&
                     <div className="row alert alert-warning justify-content-center" style={{

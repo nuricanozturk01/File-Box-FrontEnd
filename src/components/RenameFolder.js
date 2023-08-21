@@ -2,11 +2,13 @@ import React, {useContext, useEffect, useState} from "react";
 import {RenameFolderWithFolderId} from "../service/RenameService";
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
+import ToastMessage from "./ToastMessage";
 
 const RenameFolder = ({folder}) =>
 {
     const [newFolderName, setNewFolderName] = useState()
     const [renameFolder, setRenameFolder] = useState(null)
+    const [success, setSuccess] = useState()
     const blacklist = ['/', '\\', '>', '<', ':', '"', '|', '?', '*']
     const context = useContext(Context)
     useEffect(() =>
@@ -35,7 +37,11 @@ const RenameFolder = ({folder}) =>
             if (context.illegalChar === Status.Fail || context.illegalChar === Status.None)
             {
                 const response = await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
-
+                if (response)
+                {
+                    context.setShowAlert(true)
+                    setSuccess(true)
+                }
                 context.folderView
                     .filter(fw => fw.folderId === folder.folderId)
                     .map(fw =>
@@ -55,6 +61,7 @@ const RenameFolder = ({folder}) =>
     };
     return (
         <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+            {success && <ToastMessage message="Folder name changed Successfully!" title="Notification" rightSideMessage="now"/>}
             <div className="form-floating mb-4" style={{position: "relative"}}>
                 {context.illegalChar !== Status.None && context.illegalChar === Status.Success &&
                     <div className="row alert alert-warning justify-content-center" style={{

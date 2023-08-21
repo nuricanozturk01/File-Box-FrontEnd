@@ -45,7 +45,6 @@ const TableComponent = ({navigateId}) =>
     const HandleFolderClick = async (folder) =>
     {
         context.setCurrentFolder(folder)
-
         const folders = await FindFoldersByUserIdAndFolderId(folder.folderId);
         const files = await FindFilesOnFolder(folder.folderId)
 
@@ -57,13 +56,13 @@ const TableComponent = ({navigateId}) =>
             link: folder.folderPath,
             folderId: folder.folderId
         }
-
         context.setTitle(prev => [...prev, newTitle])
     };
 
 
     function HandleFile(file)
     {
+        console.log(file)
         setClick(true)
         setViewFile(file)
     }
