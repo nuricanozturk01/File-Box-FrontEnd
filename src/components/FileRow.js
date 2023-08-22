@@ -28,6 +28,7 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
     const [success, setSuccess] = useState()
     const context = useContext(Context)
     const [showContextMenu, setShowContextMenu] = useState(false);
+    const [movedFileId, setMovedFileId] = useState(-1)
     const HandleDownloadFile = async (file) =>
     {
         context.setIsUpload(false)
@@ -143,13 +144,34 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
     };
 
 
+    const handleDragStart = (event) =>
+    {
+        console.log(file.file_id)
+        console.log(file.file_name)
+       event.dataTransfer.setData('file' ,file.file_id);
+       setMovedFileId(file.file_id)
+    };
+    const refresh = () =>
+    {
+        if (movedFileId !== -1)
+        {
+            context.setFileView((fileView) =>
+                fileView.filter((f) => f.file_id !== movedFileId));
+            context.setMoveSuccess(false)
+        }
+    };
     return (
+
         <tr style={{backgroundColor: "#272727"}}>
+            {context.moveSuccess && refresh()}
 
-
-            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
-                onClick={handleOnClick}>
-                <a onClick={() => handleFile(file)} style={{display: "flex", alignItems: "center"}}>
+            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}
+                onContextMenu={handleContextMenu}
+                onClick={handleOnClick}
+                draggable
+                onDragStart={handleDragStart}>
+                <a
+                    onClick={() => handleFile(file)} style={{display: "flex", alignItems: "center"}}>
 
                     <img src={determineFileImage()} style={{marginRight: "5px"}} alt="file" height="50" width="50"/>
                     <label style={{

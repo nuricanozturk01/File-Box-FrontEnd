@@ -18,12 +18,14 @@ import {
 } from "../service/FindFoldersByUserIdAndFolderId";
 
 import folder_image from '../images/folder-minus-svgrepo-com.svg'
+import UploadFolderComponent from "./UploadFolderComponent";
 
 const OptionsNavBar = ({handleFolderClick}) =>
 {
 
     const context = useContext(Context)
     const [isCreateFolder, setIsCreateFolder] = useState(false)
+    const [isClickUploadFile, setIsClickUploadFile] = useState(false)
     const [isClickUploadFolder, setIsClickUploadFolder] = useState(false)
 
     const [selectedExtension, setSelectedExtension] = useState(null);
@@ -121,7 +123,7 @@ const OptionsNavBar = ({handleFolderClick}) =>
     };
     const HandleUploadFiles = () =>
     {
-        setIsClickUploadFolder(!isClickUploadFolder)
+        setIsClickUploadFile(!isClickUploadFile)
     };
 
     const HandleSortFilesByFileSize = async () =>
@@ -150,9 +152,14 @@ const OptionsNavBar = ({handleFolderClick}) =>
     {
         window.location.href = "/home";
     };
+    const HandleUploadFolders = () =>
+    {
+        setIsClickUploadFolder(!isClickUploadFolder)
+    };
     return (
         <div>
-            {isClickUploadFolder && <UploadComponentFiles/>}
+            {isClickUploadFile && <UploadComponentFiles/>}
+            {/*{isClickUploadFolder && <UploadFolderComponent/>}*/}
             <div>
                 <Navbar expand="sm" data-bs-theme="dark"
                         style={{
@@ -211,6 +218,9 @@ const OptionsNavBar = ({handleFolderClick}) =>
                                 <Nav.Link disabled={true}>|</Nav.Link>
                                 <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFiles}>Upload
                                     Files</Nav.Link>
+
+                               {/* <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFolders}>Upload
+                                    Folders</Nav.Link>*/}
 
                                 <Nav.Link disabled={true}>||</Nav.Link>
 

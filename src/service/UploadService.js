@@ -76,25 +76,26 @@ export const CreateFolder = async (folderId, folderName) =>
 
     }
 }
-export const UploadFolders = async (folderId, selectedFiles) =>
+export const UploadFolders = async (folderId, selectedFolder) =>
 {
     try
     {
-        const folderName = selectedFiles[0].webkitRelativePath.split('/')[0]
-        // const newFolderId = await CreateFolder(folderId, folderName)
-        //console.log("NF: ", newFolderId)
-        // await UploadFiles(newFolderId, selectedFiles);
-        /*        const uploadDirectoryDto = {
-                    source_file_name : "D:\\cv"
-                }
-                try {
-                    const response = await axios.post(URL, uploadDirectoryDto, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}});
-                    console.log(response.data.data)
-                } catch (error) {
-                    console.error('Error uploading files:', error);
-                }*/
-    } catch (error)
-    {
+        const uploadDirectoryDto = {
+            source_file_name: "D    :\\cv"
+        }
 
+        const formData = new FormData();
+        formData.append('folder', selectedFolder);
+
+        const response = await axios.post('/api/upload', formData, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    }
+    catch (error)
+    {
+        console.log(error)
     }
 }

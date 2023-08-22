@@ -6,6 +6,7 @@ import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
 import RightClickComponent from "./RightClickComponent";
+import {MoveFileToAnotherFolder} from "../service/MoveService";
 
 const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
 {
@@ -57,10 +58,24 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
         setShowContextMenu(false);
     };
 
+    const handleDragOver = (e) =>
+    {
+        e.preventDefault();
+    };
+    const handleDrop = async (e) =>
+    {
+        e.preventDefault();
+        console.log(folder.folderName)
+        const file_id = e.dataTransfer.getData('file');
+        const response = await MoveFileToAnotherFolder(file_id, folder.folderId);
+        context.setMoveSuccess(true)
+    };
     return (
         <tr>
             <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
-                onClick={handleOnClick}>
+                onClick={handleOnClick}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}>
                 <a onClick={() => handleFolderClick(folder)}>
                     <img src={folder_image} alt="folder" height="40" width="40"/>
                     <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
