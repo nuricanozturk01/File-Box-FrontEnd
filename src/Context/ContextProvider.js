@@ -27,10 +27,16 @@ const ContextProvider = (props) => {
 
     const [uploading, setUploading] = useState(false);
     const [progress, setProgress] = useState([]);
+    const [handleCopyFile, setHandleCopyFile] = useState(false)
+    const [handleCutFile, setHandleCutFile] = useState(false)
     const [moveSuccess, setMoveSuccess] = useState(false)
+    const [cutOrCopySuccess, setCutOrCopySuccess] = useState(false)
     return (
         <Context.Provider value={{
+            cutOrCopySuccess, setCutOrCopySuccess,
             moveSuccess, setMoveSuccess,
+            handleCutFile, setHandleCutFile,
+            handleCopyFile, setHandleCopyFile,
             uploading, setUploading,
             progress, setProgress,
             successSentEmail, setSuccessSentEmail,

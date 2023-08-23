@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import pdf_file from "../images/filetype-pdf.svg"
 import js_file from "../images/javascript-svgrepo-com.svg"
 import word_file from "../images/word2-svgrepo-com.svg"
@@ -16,19 +16,25 @@ import text_image from "../images/clipboard-list-svgrepo-com.svg";
 import zip_image from "../images/zip-svgrepo-com.svg";
 import powerpoint_image from "../images/powerpoint2-svgrepo-com.svg";
 import excel_image from "../images/excel2-svgrepo-com.svg";
-import {RemoveFileWithFileId} from "../service/RemoveService";
+import {RemoveFileWithFileId, RemoveMultipleFileByFileIds} from "../service/RemoveService";
 import {DownloadFile} from "../service/DownloadService";
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
 import RightClickComponent from "./RightClickComponent";
+import {CopyFileToAnotherFolder} from "../service/CopyService";
+import {MoveFileToAnotherFolder} from "../service/MoveService";
+import {
+    FindRootFolderByUserId
+} from "../service/FindFoldersByUserIdAndFolderId";
 
-const FileRow = ({file, handleFile, handleRenameFile}) =>
+const FileRow = ({file, handleFile, handleRenameFile, handleMultipleFileCheckbox, multipleFiles, clearCheckBoxes}) =>
 {
     const [success, setSuccess] = useState()
     const context = useContext(Context)
     const [showContextMenu, setShowContextMenu] = useState(false);
     const [movedFileId, setMovedFileId] = useState(-1)
+    const [transferSuccess, setTransferSuccess] = useState(false)
     const HandleDownloadFile = async (file) =>
     {
         context.setIsUpload(false)
@@ -51,7 +57,7 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
     const HandleRemoveFile = async (file) =>
     {
-        const res = await RemoveFileWithFileId(file.file_id)
+        await RemoveFileWithFileId(file.file_id)
         context.setFileView((prevFile) => prevFile.filter((f) => f.file_id !== file.file_id));
     };
 
@@ -146,24 +152,71 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
     const handleDragStart = (event) =>
     {
-        console.log(file.file_id)
-        console.log(file.file_name)
-       event.dataTransfer.setData('file' ,file.file_id);
-       setMovedFileId(file.file_id)
+        event.dataTransfer.setData('file', file.file_id);
+        setMovedFileId(file.file_id)
     };
-    const refresh = () =>
+
+
+    const refreshDelete = async () =>
     {
         if (movedFileId !== -1)
         {
-            context.setFileView((fileView) =>
-                fileView.filter((f) => f.file_id !== movedFileId));
+            context.setFileView((fileView) => fileView.filter(f => f.file_id !== movedFileId));
             context.setMoveSuccess(false)
         }
     };
-    return (
 
+    const HandleCopyFile = (file) =>
+    {
+        localStorage.setItem("copied_file", JSON.stringify(file))
+        localStorage.setItem("cut_file", null)
+    };
+    const HandleMoveFile = (file) =>
+    {
+        localStorage.setItem("cut_file", JSON.stringify(file))
+        localStorage.setItem("copied_file", null)
+    };
+    const HandlePasteFile = async (folder) =>
+    {
+        let transferFolderId = folder.folder_id ? folder.folder_id : folder.folderId
+        let file_operation = null;
+
+        if (JSON.parse(localStorage.getItem("copied_file")))
+        {
+            file_operation = JSON.parse(localStorage.getItem("copied_file"))
+            const response = await CopyFileToAnotherFolder(file_operation.file_id, transferFolderId)
+            localStorage.setItem("copied_file", null)
+            refreshFiles(response.new_file)
+            context.setShowAlert(true)
+            setTransferSuccess(true)
+
+        } else if (JSON.parse(localStorage.getItem("cut_file")))
+        {
+            file_operation = JSON.parse(localStorage.getItem("cut_file"))
+            const response = await MoveFileToAnotherFolder(file_operation.file_id, transferFolderId);
+            localStorage.setItem("cut_file", null)
+            refreshFiles(response.new_file)
+            context.setShowAlert(true)
+            setTransferSuccess(true)
+        }
+    };
+
+    const HandleRemoveMultipleFile = async () =>
+    {
+        await RemoveMultipleFileByFileIds(multipleFiles)
+        context.setFileView((prevFile) => prevFile.filter(f => !multipleFiles.includes(f.file_id)));
+        clearCheckBoxes();
+    };
+
+    const refreshFiles = (file) =>
+    {
+        context.setFileView(prev => [...prev, file])
+    };
+    return (
         <tr style={{backgroundColor: "#272727"}}>
-            {context.moveSuccess && refresh()}
+
+            {context.moveSuccess && refreshDelete()}
+            {context.cutOrCopySuccess && refreshFiles()}
 
             <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}
                 onContextMenu={handleContextMenu}
@@ -188,8 +241,6 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
             </td>
 
 
-
-
             <td style={{
                 verticalAlign: "middle",
                 textAlign: "center",
@@ -201,9 +252,6 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
                 </label>
 
             </td>
-
-
-
 
 
             <td style={{
@@ -220,21 +268,51 @@ const FileRow = ({file, handleFile, handleRenameFile}) =>
 
             </td>
 
-            {success &&
-                <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
+
+            <td style={{
+                verticalAlign: "middle",
+                textAlign: "center",
+                backgroundColor: "#272727",
+                whiteSpace: "normal"
+            }}>
+                <div>
+                    <input
+                        style={{
+                            backgroundColor: "#404040",
+                            borderColor: "#232323"
+                        }}
+                        className="form-check-input"
+                        type="checkbox"
+                        id="checkboxNoLabel"
+                        value="" aria-label="..."
+                        onClick={() => handleMultipleFileCheckbox(file)}/>
+                </div>
+
+            </td>
+
+            {transferSuccess && <ToastMessage message="File Transfer occured successfully!" title="Success" rightSideMessage="now"/>}
+            {success && <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
 
             {showContextMenu && (
-                <div style={{position: 'absolute', zIndex: '100', top: context.yPosition, left: context.xPosition, backgroundColor: "#272727"}}>
+                <div style={{
+                    position: 'absolute',
+                    zIndex: '100',
+                    top: context.yPosition,
+                    left: context.xPosition,
+                    backgroundColor: "#272727"
+                }}>
                     <RightClickComponent
                         download={() => HandleDownloadFile(file)}
                         rename={() => handleRenameFile(file)}
                         remove={() => HandleRemoveFile(file)}
+                        handleCopyFile={() => HandleCopyFile(file)}
+                        handleCutFile={() => HandleMoveFile(file)}
+                        handlePasteFile={() => HandlePasteFile((context.currentFolder ? context.currentFolder : context.rootFolder))}
+                        removeMultipleFiles={HandleRemoveMultipleFile}
                     />
                 </div>
             )}
         </tr>
-
-
     );
 };
 

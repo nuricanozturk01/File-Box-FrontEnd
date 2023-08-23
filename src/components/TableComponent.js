@@ -10,13 +10,14 @@ import {
     FindFoldersByUserIdAndFolderId,
     FindRootFolderByUserId
 } from "../service/FindFoldersByUserIdAndFolderId";
+import {RemoveMultipleFileByFileIds} from "../service/RemoveService";
 
 
 const TableComponent = ({navigateId}) =>
 {
     // Listing components
     const [click, setClick] = useState(false)
-
+    const [multipleFileList, setMultipleFileList] = useState([])
     const [viewFile, setViewFile] = useState(null)
     const [viewFolder, setViewFolder] = useState(null)
 
@@ -57,12 +58,13 @@ const TableComponent = ({navigateId}) =>
             folderId: folder.folderId
         }
         context.setTitle(prev => [...prev, newTitle])
+        setMultipleFileList([])
+        HandleClearSelections()
     };
 
 
     function HandleFile(file)
     {
-        console.log(file)
         setClick(true)
         setViewFile(file)
     }
@@ -87,6 +89,8 @@ const TableComponent = ({navigateId}) =>
                 context.setFileView(files)
             }
             fetchData()
+            setMultipleFileList([])
+            HandleClearSelections()
         }
 
     }, [navigateId])
@@ -111,6 +115,29 @@ const TableComponent = ({navigateId}) =>
         setViewFile(null)
     };
 
+    const HandleMultipleFileCheckbox = async (file) => {
+        if (!multipleFileList.includes(file.file_id)) {
+            let prev = multipleFileList
+            prev.push(file.file_id)
+            setMultipleFileList(prev)
+        } else {
+            let k = multipleFileList;
+            k = k.filter(f => f !== file.file_id);
+            setMultipleFileList(k)
+        }
+    };
+
+    const HandleClearSelections = () =>
+    {
+        const checkboxes = document.querySelectorAll('.form-check-input');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        setMultipleFileList([])
+    };
+
     return (
         <div>
 
@@ -125,6 +152,19 @@ const TableComponent = ({navigateId}) =>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File And Folder</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File Size</th>
+                            <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>
+                                <button
+                                        onClick={HandleClearSelections}
+                                        className="btn btn-primary"
+                                        style={{
+                                            height: "36px",
+                                            backgroundColor: "#272727",
+                                            color: "#B2B2B2",
+                                            borderColor: "#808080"
+                                        }}
+                                        type="submit"> Clear
+                                </button>
+                            </th>
                         </tr>
 
                         </thead>
@@ -150,6 +190,9 @@ const TableComponent = ({navigateId}) =>
                                 file={file}
                                 handleFile={HandleFile}
                                 handleRenameFile={HandleRenameFile}
+                                handleMultipleFileCheckbox={() => HandleMultipleFileCheckbox(file)}
+                                multipleFiles={multipleFileList}
+                                clearCheckBoxes={HandleClearSelections}
                             />
                         ))}
                         </tbody>
@@ -177,7 +220,6 @@ const TableComponent = ({navigateId}) =>
         </div>
 
     );
-
 }
 
 export default TableComponent;

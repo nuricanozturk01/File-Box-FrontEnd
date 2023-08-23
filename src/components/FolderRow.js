@@ -7,11 +7,13 @@ import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
 import RightClickComponent from "./RightClickComponent";
 import {MoveFileToAnotherFolder} from "../service/MoveService";
+import {CopyFileToAnotherFolder} from "../service/CopyService";
 
 const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
 {
     const [success, setSuccess] = useState()
     const [showContextMenu, setShowContextMenu] = useState(false);
+    const [transferSuccess, setTransferSuccess] = useState(false)
     const context = useContext(Context)
     const HandleDownloadFolder = async (folder) =>
     {
@@ -25,7 +27,6 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
             })
             .catch(error =>
             {
-
                 context.setDownloadFolderStatus(Status.Fail)
                 context.setShowAlert(true)
                 setSuccess(false)
@@ -62,16 +63,45 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
     {
         e.preventDefault();
     };
-    const handleDrop = async (e) =>
+    const handleDrop = (event) =>
     {
-        e.preventDefault();
-        console.log(folder.folderName)
-        const file_id = e.dataTransfer.getData('file');
-        const response = await MoveFileToAnotherFolder(file_id, folder.folderId);
+        event.preventDefault();
+        const file_id = event.dataTransfer.getData('file');
+
+        MoveFileToAnotherFolder(file_id, folder.folderId);
         context.setMoveSuccess(true)
+        context.setShowAlert(true)
+        setTransferSuccess(true)
     };
+
+    const HandlePasteFile = async (folder) =>
+    {
+        let file_operation = null;
+
+        if (JSON.parse(localStorage.getItem("copied_file")))
+        {
+            file_operation = JSON.parse(localStorage.getItem("copied_file"))
+            localStorage.setItem('target_folder', folder)
+            await CopyFileToAnotherFolder(file_operation.file_id, folder.folderId)
+            context.setMoveSuccess(true)
+            context.setHandleCopyFile(null)
+            context.setCutOrCopySuccess(true)
+        }
+
+        else if (JSON.parse(localStorage.getItem("cut_file")))
+        {
+            localStorage.setItem('target_folder', folder)
+            file_operation = JSON.parse(localStorage.getItem("cut_file"))
+            await MoveFileToAnotherFolder(file_operation.file_id, folder.folderId);
+            context.setHandleCutFile(null)
+            context.setCutOrCopySuccess(true)
+        }
+
+    };
+
     return (
         <tr>
+
             <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
                 onClick={handleOnClick}
                 onDragOver={handleDragOver}
@@ -82,7 +112,6 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                         {folder.folderName}
                     </label>
                 </a>
-
             </td>
 
 
@@ -90,7 +119,6 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                 <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
                     {folder.creationDate}
                 </label>
-
             </td>
 
 
@@ -99,6 +127,20 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                     - -
                 </label>
             </td>
+
+
+
+            <td style={{
+                verticalAlign: "middle",
+                textAlign: "center",
+                backgroundColor: "#272727",
+                whiteSpace: "normal"
+            }}>
+                <div>
+                    <input className="form-check-input" disabled={true} type="checkbox"  value="" aria-label="..."/>
+                </div>
+            </td>
+
 
 
             {showContextMenu && (
@@ -113,12 +155,13 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
                         download={() => HandleDownloadFolder(folder)}
                         rename={() => handleRenameFolder(folder)}
                         remove={() => HandleRemoveFolder(folder)}
+                        handlePasteFile={() => HandlePasteFile(folder)}
                     />
                 </div>
-
             )}
-            {success &&
-                <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
+
+            {transferSuccess && <ToastMessage message="File Transfer occured successfully!" title="Success" rightSideMessage="now"/>}
+            {success && <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
         </tr>
     );
 };

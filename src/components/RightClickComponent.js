@@ -7,7 +7,7 @@ import cut_image from '../images/cut-svgrepo-com.svg'
 import paste_image from '../images/paste-svgrepo-com.svg'
 import {MenuItem} from "@react-pdf-viewer/core";
 
-const RightClickComponent = ({download, rename, remove}) =>
+const RightClickComponent = ({download, rename, remove, handleCopyFile, handleCutFile, handlePasteFile, removeMultipleFiles}) =>
 {
     return (
         <div style={{backgroundColor: "#272727"}}>
@@ -18,21 +18,21 @@ const RightClickComponent = ({download, rename, remove}) =>
                 </label>
             </MenuItem>
 
-            <MenuItem >
+            <MenuItem onClick={handleCopyFile}>
                 <img src={copy_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
                 <label style={{color: "#b2b2b2"}}>
                     Copy
                 </label>
             </MenuItem>
 
-            <MenuItem >
+            <MenuItem onClick={handleCutFile}>
                 <img src={cut_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
                 <label style={{color: "#b2b2b2"}}>
                     Cut
                 </label>
             </MenuItem>
 
-            <MenuItem >
+            <MenuItem onClick={handlePasteFile}>
                 <img src={paste_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
                 <label style={{color: "#b2b2b2"}}>
                     Paste
@@ -50,6 +50,14 @@ const RightClickComponent = ({download, rename, remove}) =>
                 <img src={delete_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
                 <label style={{color: "#b2b2b2"}}>
                     Remove
+                </label>
+            </MenuItem>
+
+
+            <MenuItem onClick={removeMultipleFiles}>
+                <img src={delete_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
+                <label style={{color: "#b2b2b2"}}>
+                    Remove Selected Files
                 </label>
             </MenuItem>
         </div>
