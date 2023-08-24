@@ -24,8 +24,6 @@ const ForgotPasswordComponent = () =>
 
     return (
         <div className="container">
-
-
             <div className="row d-flex align-items-center justify-content-center" style={{height: "100vh"}}>
                 <div className="col-md-6">
                     <form style={{margin: "10px"}} onClick={event => event.preventDefault()}>

@@ -1,8 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import {Context} from "../Context/ContextProvider";
 import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
-import {UploadFilesCallback} from "../service/UploadService";
-import {Status} from "../Status";
 import ToastMessage from "./ToastMessage";
 const UploadFolderComponent = () => {
 

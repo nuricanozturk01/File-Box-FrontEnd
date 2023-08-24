@@ -15,7 +15,6 @@ const MainPage = () =>
         setFolder(folderId)
     };
 
-
     return (
         <div className="grid" style={{backgroundColor: "#1c1c1c", height: "100v", width: "100v"}}>
             <Navbar/>

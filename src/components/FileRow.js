@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import pdf_file from "../images/filetype-pdf.svg"
 import js_file from "../images/javascript-svgrepo-com.svg"
 import word_file from "../images/word2-svgrepo-com.svg"
@@ -24,9 +24,6 @@ import ToastMessage from "./ToastMessage";
 import RightClickComponent from "./RightClickComponent";
 import {CopyFileToAnotherFolder} from "../service/CopyService";
 import {MoveFileToAnotherFolder} from "../service/MoveService";
-import {
-    FindRootFolderByUserId
-} from "../service/FindFoldersByUserIdAndFolderId";
 
 const FileRow = ({file, handleFile, handleRenameFile, handleMultipleFileCheckbox, multipleFiles, clearCheckBoxes}) =>
 {

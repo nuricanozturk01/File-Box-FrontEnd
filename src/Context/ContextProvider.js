@@ -3,7 +3,8 @@ import {Status} from "../Status";
 
 
 export const Context = createContext();
-const ContextProvider = (props) => {
+const ContextProvider = (props) =>
+{
     const [title, setTitle] = useState([])
     const [currentFolder, setCurrentFolder] = useState()
     const [rootFolder, setRootFolder] = useState()

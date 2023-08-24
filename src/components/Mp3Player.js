@@ -2,7 +2,6 @@ import React from "react";
 
 const Mp3Player = ({filePath}) =>
 {
-
     return (
         <div>
             <audio controls>

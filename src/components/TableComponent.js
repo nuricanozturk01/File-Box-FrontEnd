@@ -10,7 +10,6 @@ import {
     FindFoldersByUserIdAndFolderId,
     FindRootFolderByUserId
 } from "../service/FindFoldersByUserIdAndFolderId";
-import {RemoveMultipleFileByFileIds} from "../service/RemoveService";
 
 
 const TableComponent = ({navigateId}) =>

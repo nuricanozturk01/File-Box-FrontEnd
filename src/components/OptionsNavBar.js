@@ -18,7 +18,6 @@ import {
 } from "../service/FindFoldersByUserIdAndFolderId";
 
 import folder_image from '../images/folder-minus-svgrepo-com.svg'
-import UploadFolderComponent from "./UploadFolderComponent";
 
 const OptionsNavBar = ({handleFolderClick}) =>
 {
