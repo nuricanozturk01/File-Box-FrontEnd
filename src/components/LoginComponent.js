@@ -98,7 +98,8 @@ const LoginComponent = () =>
                         </div>
 
                         <div className="text-center mb-4">
-                            <button onClick={HandleLoginButton}
+                            <button id="login-button"
+                                    onClick={HandleLoginButton}
                                     className="btn btn-primary w-10 py-2"
                                     style={{
                                         backgroundColor: "#272727",

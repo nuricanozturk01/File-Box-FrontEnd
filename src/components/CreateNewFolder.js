@@ -52,7 +52,7 @@ const CreateNewFolder = () =>
                 setSuccess(true)
             }
             const dto = {
-                creationDate: new Date().toLocaleDateString(),
+                creationDate: response.creation_date,
                 folderId: response.folderId,
                 folderName: response.folder_name,
                 folderPath: response.folder_path,
@@ -67,7 +67,7 @@ const CreateNewFolder = () =>
             {success && <ToastMessage message="Folder created Successfully!" title="Notification" rightSideMessage="now"/>}
             <div className="form-floating mb-4" style={{position: "relative"}}>
                 {context.illegalChar !== Status.None && context.illegalChar === Status.Success &&
-                    <div className="row alert alert-warning justify-content-center" style={{
+                    <div id="invalid-created-folder-name" className="row alert alert-warning justify-content-center" style={{
                         marginBottom: "45px",
                     }} role="alert">
                         You cannot enter the /\*?{'<>'}:"| characters!
@@ -90,7 +90,7 @@ const CreateNewFolder = () =>
                 <input
                     type="text"
                     className="form-control"
-                    id="floatingInput"
+                    id="create-folder-input"
                     style={{
                         backgroundColor: "#272727",
                         color: "#B2B2B2",
@@ -103,6 +103,7 @@ const CreateNewFolder = () =>
 
             </div>
             <button
+                id="create-folder-button"
                 onClick={HandleSubmitButton}
                 className="btn btn-primary py-2"
                 style={{

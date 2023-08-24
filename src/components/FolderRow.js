@@ -100,15 +100,16 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
     };
 
     return (
-        <tr>
+        <tr id="folder-col">
 
-            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
+            <td id="folder-image-col"
+                style={{verticalAlign: "middle", backgroundColor: "#272727"}} onContextMenu={handleContextMenu}
                 onClick={handleOnClick}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}>
-                <a onClick={() => handleFolderClick(folder)}>
+                <a id="folder-image-ref" onClick={() => handleFolderClick(folder)}>
                     <img src={folder_image} alt="folder" height="40" width="40"/>
-                    <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
+                    <label id="folder-name-label" style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
                         {folder.folderName}
                     </label>
                 </a>
@@ -116,7 +117,7 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
 
 
             <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
+                <label id="folder-creation_date-ref" style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
                     {folder.creationDate}
                 </label>
             </td>

@@ -212,35 +212,34 @@ const OptionsNavBar = ({handleFolderClick}) =>
                             <Nav className="me-auto my-2 my-lg-0">
 
                             </Nav>
-                            <Nav className="ml-auto">
-                                <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleCreateFolder}>Create
+                            <Nav className="ml-auto" id="navbar-menu">
+                                <Nav.Link id="create-folder" style={{color: "#b2b2b2"}} href="#" onClick={HandleCreateFolder}>Create
                                     Folder</Nav.Link>
                                 <Nav.Link disabled={true}>|</Nav.Link>
-                                <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFiles}>Upload
+                                <Nav.Link id="upload-file" style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFiles}>Upload
                                     Files</Nav.Link>
-
-                               {/* <Nav.Link style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFolders}>Upload
-                                    Folders</Nav.Link>*/}
 
                                 <Nav.Link disabled={true}>||</Nav.Link>
 
-
-                                <NavDropdown title="Sort By">
-                                    <NavDropdown.Item style={{backgroundColor: "#272727"}}
-                                                      href="#action/3.1"
+                                <NavDropdown title="Sort By" id="sort-by">
+                                    <NavDropdown.Item id="sort-date"
+                                                      style={{backgroundColor: "#272727"}}
+                                                      href="#"
                                                       onClick={HandleSortFilesByCreationDate}>
 
                                         Date
                                     </NavDropdown.Item>
                                     <NavDropdown.Item style={{backgroundColor: "#272727"}}
-                                                      href="#action/3.1"
+                                                      id="sort-file_size"
+                                                      href="#"
                                                       onClick={HandleSortFilesByFileSize}>
                                         File Size</NavDropdown.Item>
                                 </NavDropdown>
                                 <Nav.Link disabled={true}>|</Nav.Link>
-                                <NavDropdown title="Filter By">
+                                <NavDropdown title="Filter By" id="filter-by">
                                     {extensions.map(extension => (
                                         <NavDropdown.Item
+                                            id="filter-by-extension"
                                             key={extension}
                                             style={{
                                                 backgroundColor: "#272727",

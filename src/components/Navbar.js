@@ -43,7 +43,7 @@ const NavBar = () =>
                     <Nav className="ms-auto">
                         <Navbar.Brand style={{color: "#c5c5c5", fontSize: "11pt", fontFamily: "Arial, Helvetica, sans-serif"}}>
                             <img src={account_image} alt="account" width="25px" height="27px"/>
-                            <label style={{marginLeft: "4px"}}>
+                            <label id="account-info" style={{marginLeft: "4px"}}>
                                 account: [{localStorage.getItem('username')}]
                             </label>
                         </Navbar.Brand>

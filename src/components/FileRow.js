@@ -213,21 +213,21 @@ const FileRow = ({file, handleFile, handleRenameFile, handleMultipleFileCheckbox
         context.setFileView(prev => [...prev, file])
     };
     return (
-        <tr style={{backgroundColor: "#272727"}}>
+        <tr id ="file-col" style={{backgroundColor: "#272727"}}>
 
             {context.moveSuccess && refreshDelete()}
             {context.cutOrCopySuccess && refreshFiles()}
 
-            <td style={{verticalAlign: "middle", backgroundColor: "#272727"}}
+            <td id="file-image-col" style={{verticalAlign: "middle", backgroundColor: "#272727"}}
                 onContextMenu={handleContextMenu}
                 onClick={handleOnClick}
                 draggable
                 onDragStart={handleDragStart}>
-                <a
+                <a  id="file-image-ref"
                     onClick={() => handleFile(file)} style={{display: "flex", alignItems: "center"}}>
 
                     <img src={determineFileImage()} style={{marginRight: "5px"}} alt="file" height="50" width="50"/>
-                    <label style={{
+                    <label id="file-name-label" style={{
                         color: "#b2b2b2",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
@@ -241,26 +241,26 @@ const FileRow = ({file, handleFile, handleRenameFile, handleMultipleFileCheckbox
             </td>
 
 
-            <td style={{
+            <td id="file-creation_date-col" style={{
                 verticalAlign: "middle",
                 textAlign: "center",
                 backgroundColor: "#272727",
                 whiteSpace: "normal"
             }}>
-                <label style={{color: "#b2b2b2", marginLeft: "20px", whiteSpace: "normal"}}>
+                <label id="file-creation_date-ref" style={{color: "#b2b2b2", marginLeft: "20px", whiteSpace: "normal"}}>
                     {file.created_date}
                 </label>
 
             </td>
 
 
-            <td style={{
+            <td id="file-size-col" style={{
                 verticalAlign: "middle",
                 textAlign: "center",
                 backgroundColor: "#272727",
                 whiteSpace: "normal"
             }}>
-                <label style={{color: "#b2b2b2", marginLeft: "20px", whiteSpace: "normal"}}>
+                <label id="file-size-ref" style={{color: "#b2b2b2", marginLeft: "20px", whiteSpace: "normal"}}>
                     {
                         calculateFileSize(file.file_byte)
                     }

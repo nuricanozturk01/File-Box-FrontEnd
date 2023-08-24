@@ -11,52 +11,52 @@ const RightClickComponent = ({download, rename, remove, handleCopyFile, handleCu
 {
     return (
         <div style={{backgroundColor: "#272727"}}>
-            <MenuItem onClick={download}>
+            <MenuItem id="download-right-click-item" onClick={download}>
                 <img src={download_image} alt="download" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="download-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Download
                 </label>
             </MenuItem>
 
-            <MenuItem onClick={handleCopyFile}>
+            <MenuItem id="copy-right-click-item" onClick={handleCopyFile}>
                 <img src={copy_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="copy-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Copy
                 </label>
             </MenuItem>
 
-            <MenuItem onClick={handleCutFile}>
+            <MenuItem id="cut-right-click-item" onClick={handleCutFile}>
                 <img src={cut_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="cut-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Cut
                 </label>
             </MenuItem>
 
-            <MenuItem onClick={handlePasteFile}>
+            <MenuItem id="paste-right-click-item" onClick={handlePasteFile}>
                 <img src={paste_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="paste-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Paste
                 </label>
             </MenuItem>
 
-            <MenuItem onClick={rename}>
+            <MenuItem id="rename-right-click-item" onClick={rename}>
                 <img src={rename_image} alt="rename" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="rename-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Rename
                 </label>
             </MenuItem>
 
-            <MenuItem onClick={remove}>
+            <MenuItem id="remove-right-click-item" onClick={remove}>
                 <img src={delete_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="remove-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Remove
                 </label>
             </MenuItem>
 
 
-            <MenuItem onClick={removeMultipleFiles}>
+            <MenuItem id="remove-multiple-right-click-item" onClick={removeMultipleFiles}>
                 <img src={delete_image} alt="delete" width="20px" height="25px" style={{marginRight: "3px"}}/>
-                <label style={{color: "#b2b2b2"}}>
+                <label id="remove-multiple-right-click-item-button" style={{color: "#b2b2b2"}}>
                     Remove Selected Files
                 </label>
             </MenuItem>

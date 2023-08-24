@@ -85,7 +85,7 @@ const RenameFile = ({file}) =>
                 <input
                     type="text"
                     className="form-control"
-                    id="floatingInput"
+                    id="rename-file-input"
                     style={{
                         backgroundColor: "#272727",
                         color: "#B2B2B2",
@@ -99,6 +99,7 @@ const RenameFile = ({file}) =>
             </div>
 
             <button
+                id="rename-file-button"
                 onClick={HandleSubmitButton}
                 className="btn btn-primary py-2"
                 style={{

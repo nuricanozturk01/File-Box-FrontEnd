@@ -23,7 +23,7 @@ const MessageComponent = () =>
     return (
         <div className="container col-md-3">
             {context.loginStatus !== Status.None && context.loginStatus === Status.Fail &&
-                <div className="row alert alert-danger justify-content-center"
+                <div id = "unsuccess-login" className="row alert alert-danger justify-content-center"
                      role="alert"
                      style={{width: "350px"}}>Please control the username and password</div>}
 

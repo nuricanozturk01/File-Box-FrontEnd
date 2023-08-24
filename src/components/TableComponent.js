@@ -145,10 +145,10 @@ const TableComponent = ({navigateId}) =>
 
                 {!click && (
 
-                    <Table className="table-dark table-hover table-bordered" style={{backgroundColor: "#272727"}} >
+                    <Table id="table" className="table-dark table-hover table-bordered" style={{backgroundColor: "#272727"}} >
                         <thead style={{textAlign: "center", backgroundColor: "#272727"}}>
 
-                        <tr>
+                        <tr id="file-and-folder-tablerow-header">
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File And Folder</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>Creation Date</th>
                             <th style={{backgroundColor: "#272727", color: "#b2b2b2"}}>File Size</th>
@@ -170,7 +170,7 @@ const TableComponent = ({navigateId}) =>
                         </thead>
 
 
-                        <tbody style={{backgroundColor: "#272727"}}>
+                        <tbody id="table-body" style={{backgroundColor: "#272727"}}>
 
                         {/*List Folders*/}
                         {context.folderView.map((folder, idx) => (
