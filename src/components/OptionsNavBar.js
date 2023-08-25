@@ -14,10 +14,12 @@ import UploadComponentFiles from "./UploadComponentFiles";
 import {
     FindFilesOnFolder,
     FindFolderByFolderId,
-    FindFoldersByUserIdAndFolderId
+    FindFoldersByUserIdAndFolderId, FindRootFolderByUserId
 } from "../service/FindFoldersByUserIdAndFolderId";
 
 import folder_image from '../images/folder-minus-svgrepo-com.svg'
+import {Link} from "react-router-dom";
+import {ViewStatus} from "../ViewStatus";
 
 const OptionsNavBar = ({handleFolderClick}) =>
 {
@@ -32,10 +34,11 @@ const OptionsNavBar = ({handleFolderClick}) =>
     //const [tmpFiles, setTmpFiles] = useState()
     const [extensions, setExtensions] = useState(['.jpg', '.png', '.pdf', '.docx'])
 
-    useEffect(() => {
+    useEffect(() =>
+    {
         const extensions = context.fileView.map(fw => fw.file_type).filter((value, index, self) => self.indexOf(value) === index)
         setExtensions(extensions)
-       // setExtensions(prev => [...prev, 'normal'])
+        // setExtensions(prev => [...prev, 'normal'])
 
     }, [context.fileView])
     const handleExtensionSelect = (extension) =>
@@ -53,9 +56,9 @@ const OptionsNavBar = ({handleFolderClick}) =>
             let folderId = context.rootFolder.folder_id
             if (context.currentFolder)
                 folderId = context.currentFolder.folderId
-            
+
             const data = await FilterFilesByFileExtension(folderId, selectedExtension)
-            
+
             context.setFileView(data.files)
         }
     };
@@ -158,7 +161,6 @@ const OptionsNavBar = ({handleFolderClick}) =>
     return (
         <div>
             {isClickUploadFile && <UploadComponentFiles/>}
-            {/*{isClickUploadFolder && <UploadFolderComponent/>}*/}
             <div>
                 <Navbar expand="sm" data-bs-theme="dark"
                         style={{
@@ -167,15 +169,14 @@ const OptionsNavBar = ({handleFolderClick}) =>
                             backgroundColor: "#272727",
                             height: "35px",
                             fontSize: "12pt",
-                            display: "flex", // Flexbox kullanarak içeriği yatayda hizalayın
-                            justifyContent: "center", // İçeriği yatayda tam ortada hizalayın
-                            alignItems: "center", // İçeriği dikeyde tam ortada hizalayın
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
                         }}>
                     <Container>
                         <Navbar.Brand href="#home" style={{color: "#D2D2D2", fontSize: "12pt", marginTop: "20px"}}>
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb d-flex">
-
                                     <Context.Consumer>
                                         {context => (
                                             <>
@@ -187,19 +188,20 @@ const OptionsNavBar = ({handleFolderClick}) =>
                                                 </div>
                                                 {context.title.map((titleItem, index) => (
                                                     <li className="breadcrumb-item" key={index}>
+
                                                         <img src={folder_image} alt="home" width="25px"
                                                              height="29px"
                                                              style={{marginBottom: "6px"}}/>
                                                         <span
                                                             onClick={async () => await handleLinkClick(titleItem.link, titleItem)}>
                                                             {titleItem.shortName}
+                                                          {/*  <Link to={`${titleItem.shortName ? `${titleItem.shortName}/` : ''}`}/>*/}
                                                         </span>
                                                     </li>
                                                 ))}
                                             </>
                                         )}
                                     </Context.Consumer>
-
                                 </ol>
                             </nav>
 
@@ -212,20 +214,50 @@ const OptionsNavBar = ({handleFolderClick}) =>
 
                             </Nav>
                             <Nav className="ml-auto" id="navbar-menu">
-                                <Nav.Link id="create-folder" style={{color: "#b2b2b2"}} href="#" onClick={HandleCreateFolder}>Create
+                                <Nav.Link id="create-folder" style={{color: "#b2b2b2"}} href="#"
+                                          onClick={HandleCreateFolder}>Create
                                     Folder</Nav.Link>
                                 <Nav.Link disabled={true}>|</Nav.Link>
-                                <Nav.Link id="upload-file" style={{color: "#b2b2b2"}} href="#" onClick={HandleUploadFiles}>Upload
+                                <Nav.Link id="upload-file" style={{color: "#b2b2b2"}} href="#"
+                                          onClick={HandleUploadFiles}>Upload
                                     Files</Nav.Link>
 
                                 <Nav.Link disabled={true}>||</Nav.Link>
 
+                                <NavDropdown title="View" id="view-type">
+
+                                    <NavDropdown.Item
+                                                      id="grid-view"
+                                                      style={{backgroundColor: "#272727"}}
+                                                      href="#"
+                                                      onClick={() =>
+                                                      {
+                                                          context.setMainView(ViewStatus.GRID);
+                                                          context.setTitle([])
+                                                      }}>
+
+                                        Grid
+                                    </NavDropdown.Item>
+
+
+                                    <NavDropdown.Item style={{backgroundColor: "#272727"}}
+                                                      id="table-view"
+                                                      href="#"
+                                                      onClick={async () =>
+                                                      {
+                                                          context.setMainView(ViewStatus.TABLE);
+                                                          context.setTitle([])
+                                                      }}>
+                                        Table
+                                    </NavDropdown.Item>
+
+                                </NavDropdown>
+                                <Nav.Link disabled={true}>|</Nav.Link>
                                 <NavDropdown title="Sort By" id="sort-by">
                                     <NavDropdown.Item id="sort-date"
                                                       style={{backgroundColor: "#272727"}}
                                                       href="#"
                                                       onClick={HandleSortFilesByCreationDate}>
-
                                         Date
                                     </NavDropdown.Item>
                                     <NavDropdown.Item style={{backgroundColor: "#272727"}}

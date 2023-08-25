@@ -1,5 +1,6 @@
 import {createContext, useState} from "react";
 import {Status} from "../Status";
+import {ViewStatus} from "../ViewStatus";
 
 
 export const Context = createContext();
@@ -32,8 +33,10 @@ const ContextProvider = (props) =>
     const [handleCutFile, setHandleCutFile] = useState(false)
     const [moveSuccess, setMoveSuccess] = useState(false)
     const [cutOrCopySuccess, setCutOrCopySuccess] = useState(false)
+    const [mainView, setMainView] = useState(localStorage.getItem("view"))
     return (
         <Context.Provider value={{
+            mainView, setMainView,
             cutOrCopySuccess, setCutOrCopySuccess,
             moveSuccess, setMoveSuccess,
             handleCutFile, setHandleCutFile,

@@ -1,30 +1,23 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import SimpleCodeEditor from 'react-simple-code-editor';
-import {highlight, languages} from 'prismjs';
+import { highlight, languages } from 'prismjs';
 import 'prismjs/themes/prism.css';
 
-
-const TextViewer = ({filePath}) =>
-{
+const TextViewer = ({ filePath }) => {
     const [code, setCode] = useState("");
 
-    useEffect(() =>
-    {
-        fetch(require('../components/file_box/' + filePath.file_path.replace(/\\/g, '/')))
+    useEffect(() => {
+        fetch(require(`../components/file_box/${filePath.file_path.replace(/\\/g, '/')}`))
             .then(response => response.text())
-            .then(data =>
-            {
+            .then(data => {
                 setCode(data);
             })
-            .catch(error =>
-            {
+            .catch(error => {
                 console.error("Error:", error);
             });
-        console.log(code)
     }, [filePath]);
 
-    const handleChange = newCode =>
-    {
+    const handleChange = newCode => {
         setCode(newCode);
     };
 

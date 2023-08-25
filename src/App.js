@@ -7,13 +7,17 @@ import PasswordChangeScreen from "./components/PasswordChangeScreen";
 import ContextProvider from "./Context/ContextProvider";
 import React from "react";
 import MessageComponent from "./components/MessageComponent";
+import FolderGrid from "./components/FolderGrid";
+import FolderRow from "./components/FolderRow";
+import {ViewStatus} from "./ViewStatus";
 
 
 const router = createBrowserRouter([
     {path: '/', element: <LoginComponent/>},
     {path: '/forgot-password', element: <ForgotPasswordComponent/>},
     {path: '/reset-password-request', element: <PasswordChangeScreen/>},
-    {path: '/home', element: <MainPage/>}
+    {path: '/home', element: <MainPage/>},
+/*    {path:"/home/:folderPath*", element:{FolderRow}}*/
 
 ])
 

@@ -82,11 +82,13 @@ const UploadComponentFiles = () =>
         <div>
             <div className="input-group mb-3"
                  style={{height: "40px", marginTop: "30px", marginBottom: "-30px", backgroundColor: "#272727"}}>
+
                 <input type="file" multiple className="form-control" id="upload-file-options-navbar"
                        style={{backgroundColor: "#272727", color: "#b2b2b2", borderColor: "#272727"}}
                        onChange={HandleFiles}/>
 
-                <button color="white" className="btn btn-outline-secondary" type="button" id="upload-file-button"
+                <button color="white"
+                        className="btn btn-outline-secondary" type="button" id="upload-file-button"
                         onClick={HandleUploadButton}>Upload
                 </button>
             </div>

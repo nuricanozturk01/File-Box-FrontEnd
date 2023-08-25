@@ -1,15 +1,16 @@
-import React, {useContext, useState} from 'react';
-import folder_image from "../images/folder.png";
-import {DownloadFolder} from "../service/DownloadService";
-import {RemoveFolderWithFolderId} from "../service/RemoveService";
+import React, {useContext, useState} from "react";
 import {Context} from "../Context/ContextProvider";
+import {DownloadFolder} from "../service/DownloadService";
 import {Status} from "../Status";
-import ToastMessage from "./ToastMessage";
-import RightClickComponent from "./RightClickComponent";
+import {RemoveFolderWithFolderId} from "../service/RemoveService";
 import {MoveFileToAnotherFolder} from "../service/MoveService";
 import {CopyFileToAnotherFolder} from "../service/CopyService";
+import folder_image from "../images/folder.png";
+import RightClickComponent from "./RightClickComponent";
+import ToastMessage from "./ToastMessage";
+import {OverlayTrigger, Tooltip} from "react-bootstrap";
 
-const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
+const FolderGrid = ({folder, handleFolderClick, handleRenameFolder}) =>
 {
     const [success, setSuccess] = useState()
     const [showContextMenu, setShowContextMenu] = useState(false);
@@ -100,50 +101,34 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
     };
 
     return (
-        <tr id="folder-col">
+        <div
+            onContextMenu={handleContextMenu}
+            onClick={handleOnClick}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            style={{ textAlign: "center" }}>
 
-            <td id="folder-image-col"
-                style={{verticalAlign: "middle", backgroundColor: "#272727"}}
-                onContextMenu={handleContextMenu}
-                onClick={handleOnClick}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}>
+            <OverlayTrigger
+                key="top"
+                placement="top"
+                overlay={<Tooltip id={`tooltip-top`}>{folder.folderName}</Tooltip>}>
+
                 <a id="folder-image-ref" onClick={() => handleFolderClick(folder)}>
-                    <img src={folder_image} alt="folder" height="40" width="40"/>
-                    <label id="folder-name-label" style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px"}}>
-                        {folder.folderName}
+                    <img src={folder_image} alt="folder" height="65" width="65" />
+                    <br />
+                    <label
+                        id="folder-name-label"
+                        style={{
+                            color: "#b2b2b2",
+                            textAlign: "center",
+                            width: "80px",
+                            margin: "20px",
+                        }}
+                    >
+                        {folder.folderName.length > 8 ? folder.folderName.substring(0, 8) + "..." : folder.folderName}
                     </label>
                 </a>
-            </td>
-
-
-            <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                <label id="folder-creation_date-ref" style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
-                    {folder.creationDate}
-                </label>
-            </td>
-
-
-            <td style={{verticalAlign: "middle", textAlign: "center", backgroundColor: "#272727"}}>
-                <label style={{color: "#b2b2b2", textAlign: "center", marginLeft: "20px", whiteSpace: "normal"}}>
-                    - -
-                </label>
-            </td>
-
-
-
-            <td style={{
-                verticalAlign: "middle",
-                textAlign: "center",
-                backgroundColor: "#272727",
-                whiteSpace: "normal"
-            }}>
-                <div>
-                    <input className="form-check-input" disabled={true} type="checkbox"  value="" aria-label="..."/>
-                </div>
-            </td>
-
-
+            </OverlayTrigger>
 
             {showContextMenu && (
                 <div style={{
@@ -164,8 +149,8 @@ const FolderRow = ({folder, handleFolderClick, handleRenameFolder}) =>
 
             {transferSuccess && <ToastMessage message="File Transfer occured successfully!" title="Success" rightSideMessage="now"/>}
             {success && <ToastMessage message="Download Operation is successful!" title="Success" rightSideMessage="now"/>}
-        </tr>
+        </div>
     );
-};
+}
 
-export default FolderRow;
+export default FolderGrid;

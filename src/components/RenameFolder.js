@@ -37,6 +37,7 @@ const RenameFolder = ({folder}) =>
             if (context.illegalChar === Status.Fail || context.illegalChar === Status.None)
             {
                 const response = await RenameFolderWithFolderId(renameFolder.folderId, newFolderName)
+                console.log(response)
                 if (response)
                 {
                     context.setShowAlert(true)

@@ -4,6 +4,8 @@ import ValidateUser from "../service/LoginService";
 import {Link, Navigate} from "react-router-dom";
 import {Context} from "../Context/ContextProvider";
 import {Status} from "../Status";
+import {ViewStatus} from "../ViewStatus";
+import {FindRootFolderByUserId} from "../service/FindFoldersByUserIdAndFolderId";
 
 
 
@@ -33,6 +35,9 @@ const LoginComponent = () =>
             localStorage.setItem("token", response.token)
             localStorage.setItem('user_id', response.user_id)
             localStorage.setItem('username', response.username)
+            const root = await FindRootFolderByUserId();
+
+            context.setRootFolder(root)
 
             // token
             setResponse(response)

@@ -1,20 +1,26 @@
-import React, {useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Navbar from "./Navbar";
 import OptionsNavBar from "./OptionsNavBar";
 import TableComponent from "./TableComponent";
 import DragDrop from "./DragDrop";
 import ProgressBarComponent from "./ProgressBarComponent";
+import GridComponent from "./GridComponent";
+import {Context} from "../Context/ContextProvider";
+import {ViewStatus} from "../ViewStatus";
 
 
 
 const MainPage = () =>
 {
+    const context = useContext(Context)
     const [folder, setFolder] = useState(null)
     const handleFolderClick = async (folderId) =>
     {
         setFolder(folderId)
     };
-
+    useEffect(() => {
+        localStorage.setItem("view", context.mainView)
+    }, [context.mainView]);
     return (
         <div className="grid" style={{backgroundColor: "#1c1c1c", height: "100v", width: "100v"}}>
             <Navbar/>
@@ -23,7 +29,9 @@ const MainPage = () =>
                     <DragDrop/>
                     <ProgressBarComponent/>
                     <OptionsNavBar handleFolderClick={handleFolderClick}/>
-                    <TableComponent navigateId={folder}/>
+
+                    {context.mainView === ViewStatus.TABLE && <TableComponent navigateId={folder}/>}
+                    {context.mainView === ViewStatus.GRID && <GridComponent navigateId={folder}/>}
                 </div>
             </div>
         </div>
