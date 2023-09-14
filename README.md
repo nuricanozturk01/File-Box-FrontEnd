@@ -1,7 +1,11 @@
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+## Project Links
+  ### Backend
+    - https://github.com/nuricanozturk01/File-Box
+  ### Selenium Test
+    - https://github.com/nuricanozturk01/File-Box-Selenium-Test
 ## Available Scripts
 
 In the project directory, you can run:
